@@ -541,7 +541,7 @@ boot_0000:
 0019: 18 68       jr   $0083
 
 
-001B: CD 7B 29    call $297B                 ; call PRINT_STRING
+001B: CD 7B 29    call print_string_297b
 001E: 
     90
     20 08         ; X/Y coordinates
@@ -550,7 +550,7 @@ boot_0000:
 0031:  50 6C 61 79 65 72 20 00                          Player . 
 0039: C9          ret
 
-003A: CD 7B 29    call $297B                 ; call PRINT_STRING
+003A: CD 7B 29    call print_string_297b
 003D: 
     90          
     10 08         ; X/Y coordinates  
@@ -764,7 +764,7 @@ boot_0000:
 ; Called from $000B
 ;
 
-colour_test_mode_0200:
+colour_0200:
 0200: 01 48 10    ld   bc,$1048
 0203: ED 78       in   a,(c)
 0205: 0C          inc  c
@@ -1233,61 +1233,61 @@ colour_test_mode_0200:
 
 
 ; Called from $0012
-input_test_mode_0531:
+input_0531:
 0531: 31 00 44    ld   sp,$4400
-0534: CD 4E 1A    call $1A4E                 ; call CLEAR_SCREEN
-0537: CD F8 35    call $35F8                 ; call COLOUR_FILL_WHITE 
+0534: CD 4E 1A    call clear_screen_1a4e
+0537: CD F8 35    call colour_fill_white_35f8
 
 ; print titles
 053A: 21 B9 05    ld   hl,$05B9              ; address of "ZPU DIP SWITCHES" text
 053D: 11 20 00    ld   de,$0020              ; D = Y coordinate, E = X coordinate
-0540: CD 91 05    call $0591                 ; print "ZPU DIP SWITCHES"
+0540: CD 91 05    call jp_print_string_0591                 ; print "ZPU DIP SWITCHES"
 0543: 11 20 80    ld   de,$8020              ; D = Y coordinate, E = X coordinate
-0546: CD 91 05    call $0591                 ; print "VFB SWITCHES"
+0546: CD 91 05    call jp_print_string_0591                 ; print "VFB SWITCHES"
 0549: 11 08 10    ld   de,$1008              ; D = Y coordinate, E = X coordinate
-054C: CD 91 05    call $0591                 ; print "1 2 3 4 5 6 7 8"
+054C: CD 91 05    call jp_print_string_0591                 ; print "1 2 3 4 5 6 7 8"
 054F: 11 10 D0    ld   de,$D010              ; D = Y coordinate, E = X coordinate
-0552: CD 91 05    call $0591                 ; print "0=OFF <hatch>=ON"
+0552: CD 91 05    call jp_print_string_0591                 ; print "0=OFF <hatch>=ON"
 
 ; create 2 horizontal rules (like <HR> tag in HTML)
 0555: 21 A0 47    ld   hl,$47A0
-0558: CD 45 1A    call $1A45                 ; call WRITE_FF_64_TIMES_HL                  
+0558: CD 45 1A    call write_ff_64_times_hl_1a45
 055B: 21 A0 55    ld   hl,$55A0
-055E: CD 45 1A    call $1A45                 ; call WRITE_FF_64_TIMES_HL
+055E: CD 45 1A    call write_ff_64_times_hl_1a45
 
 ; read ZPU DIP switches
 0561: 11 08 20    ld   de,$2008              ; D = Y coordinate, E = X coordinate
 0564: DB 61       in   a,($61)               ; read from F2 DIP switch
-0566: CD 97 05    call $0597                 ; call PRINT_SET_BITS
+0566: CD 97 05    call print_set_bits_0597
 0569: DB 60       in   a,($60)               ; read from F3 DIP switch 
-056B: CD 97 05    call $0597                 ; call PRINT_SET_BITS
+056B: CD 97 05    call print_set_bits_0597
 056E: DB 62       in   a,($62)               ; read from F6 DIP switch
-0570: CD 97 05    call $0597                 ; call PRINT_SET_BITS
+0570: CD 97 05    call print_set_bits_0597
 0573: DB 63       in   a,($63)               ; read from F5 DIP switch
-0575: CD 97 05    call $0597                 ; call PRINT_SET_BITS
+0575: CD 97 05    call print_set_bits_0597
 0578: DB 64       in   a,($64)               ; read from F4 DIP switch
-057A: CD 97 05    call $0597                 ; call PRINT_SET_BITS
+057A: CD 97 05    call print_set_bits_0597
 
 ; now print VFB switches
 057D: 11 08 90    ld   de,$9008              ; D = Y coordinate, E = X coordinate
 0580: DB 48       in   a,($48)               ; read P1 controls  
-0582: CD 96 05    call $0596                 ; call FLIP_THEN_PRINT_SET_BITS
+0582: CD 96 05    call flip_then_print_set_bits_0596
 0585: DB 49       in   a,($49)               ; read SYSTEM         
-0587: CD 96 05    call $0596                 ; call FLIP_THEN_PRINT_SET_BITS
+0587: CD 96 05    call flip_then_print_set_bits_0596
 058A: DB 4A       in   a,($4A)               ; read player 2 controls               
-058C: CD 96 05    call $0596                 ; call FLIP_THEN_PRINT_SET_BITS
+058C: CD 96 05    call flip_then_print_set_bits_0596
 058F: 18 D0       jr   $0561                 ; go back and read DIP switches until machine switched off!
 
 ; TODO: Tentative function name
 ; D = Y coordinate
 ; E = X coordinate
-JP_PRINT_STRING:
+jp_print_string_0591:
 0591: 06 00       ld   b,$00                 ; Magic RAM control bits 
 0593: C3 B8 06    jp   $06B8                 ; jump to PRINT_STRING
 
 
 
-FLIP_THEN_PRINT_SET_BITS:
+flip_then_print_set_bits_0596:
 0596: 2F          cpl                        ; flip bits
 
 ;
@@ -1301,7 +1301,7 @@ FLIP_THEN_PRINT_SET_BITS:
 ; D = Y coordinate
 ; E = X coordinate
 
-PRINT_SET_BITS:
+print_set_bits_0597:
 0597: 0E 08       ld   c,$08                 ; testing 8 bits (the full byte)
 0599: 21 01 06    ld   hl,$0601              ; address of hatch pattern string
 
@@ -1316,7 +1316,7 @@ PRINT_SET_BITS:
 05A2: F5          push af
 05A3: D5          push de
 05A4: C5          push bc
-05A5: CD 91 05    call $0591                 ; call JP_PRINT_STRING
+05A5: CD 91 05    call jp_print_string_0591
 05A8: C1          pop  bc
 05A9: D1          pop  de
 05AA: F1          pop  af
@@ -1363,8 +1363,8 @@ bookkeeping_0605:
 060F: CB 7F       bit  7,a                   ; test BOOKKEEPING bit
 0611: 20 FA       jr   nz,$060D              ; wait until user takes finger off BOOKKEEPING button
 
-0613: CD 4E 1A    call $1A4E                 ; call CLEAR_SCREEN
-0616: CD 3D 36    call $363D                 ; set colour attributes such that any pixels on all but last 2 lines of screen will be blue
+0613: CD 4E 1A    call clear_screen_1a4e
+0616: CD 3D 36    call set_color_attributes_363d                 ; set colour attributes such that any pixels on all but last 2 lines of screen will be blue
 0619: F3          di
 
 
@@ -1375,13 +1375,13 @@ bookkeeping_0605:
 061E: B7          or   a                     ; is it 0? - which is the list terminator 
 061F: CA 02 16    jp   z,$1602               ; yes, goto $1602
 
-0622: CD 9A 06    call $069A                 ; call BK_SCROLL_UP
+0622: CD 9A 06    call bk_scroll_up_069a
 0625: 06 00       ld   b,$00
 0627: 11 00 CF    ld   de,$CF00              ; D = Y coordinate, E = X coordinate
 
 ; print title of bookkeeping item then scroll screen up to make room for associated value
-062A: CD B8 06    call $06B8                 ; print title of bookkeeping item
-062D: CD 9A 06    call $069A                 ; call BK_SCROLL_UP            
+062A: CD B8 06    call print_06b8                 ; print title of bookkeeping item
+062D: CD 9A 06    call bk_scroll_up_069a
 0630: E5          push hl
 
 ; After printing text string, HL is now a pointer to 3 parameter bytes. 
@@ -1402,11 +1402,11 @@ bookkeeping_0605:
 063C: E5          push hl
 063D: E5          push hl                    ; ..on the stack
 063E: 39          add  hl,sp                 ; HL = SP
-063F: CD 73 06    call $0673                 ; call UNPACK_BYTES_TO_HL
+063F: CD 73 06    call unpack_bytes_to_hl_0673
 
 ; print digits
 0642: 11 CF 00    ld   de,$00CF              ; Set Y coordinate to print digits  
-0645: CD 8D 06    call $068D                 ; call PRINT_DIGITS_068D
+0645: CD 8D 06    call print_068d
 0648: E1          pop  hl                    ; discard temp data on stack
 0649: E1          pop  hl
 064A: E1          pop  hl
@@ -1458,7 +1458,7 @@ bookkeeping_0605:
 ; Returns: A = value read from CMOS
 ;
 
-UNPACK_BYTES_TO_HL:
+unpack_bytes_to_hl_0673:
 0673: E5          push hl
 0674: D5          push de
 0675: C5          push bc
@@ -1499,13 +1499,13 @@ UNPACK_BYTES_TO_HL:
 ; Expects: E = Y coordinate
 ;
 
-PRINT_DIGITS_068D:
+print_068d:
 068D: C5          push bc
 068E: D5          push de
 068F: E5          push hl
 0690: 53          ld   d,e                   ; set Y coordinate
 0691: 1E 00       ld   e,$00                 ; set X coordinate to 0
-0693: CD 40 2A    call $2A40                 ; call PRINT_DIGITS
+0693: CD 40 2A    call print_digits_2a40
 0696: E1          pop  hl
 0697: D1          pop  de
 0698: C1          pop  bc
@@ -1516,7 +1516,7 @@ PRINT_DIGITS_068D:
 ;
 ;
 
-BK_SCROLL_UP:
+bk_scroll_up_069a:
 069A: C5          push bc
 069B: D5          push de
 069C: E5          push hl
@@ -1547,12 +1547,12 @@ BK_SCROLL_UP:
 ; E = X coordinate
 ;
 
-PRINT_STRING_06B8:
+print_06b8:
 06B8: EB          ex   de,hl
-06B9: CD A3 29    call $29A3                 ; call CALCULATE_MAGIC_IMAGE_RAM_ADDRESS
+06B9: CD A3 29    call calculate_magic_image_ram_address_29a3
 06BC: EB          ex   de,hl
 06BD: 4E          ld   c,(hl)                ; read char from string
-06BE: CD DB 29    call $29DB                 ; call PRINT_CHAR
+06BE: CD DB 29    call print_char_29db
 06C1: 13          inc  de
 06C2: 23          inc  hl
 06C3: 47          ld   b,a
@@ -1618,7 +1618,7 @@ DC 08             ; pointer to CMOS RAM where high scores is held
 0739: F3          di
 
 
-CROSSHAIR_PATTERN_TEST_MODE:
+crosshair_pattern_test_mode_073a:
 073A: 21 00 44    ld   hl,$4400              ; load HL with address of screen image RAM              ; HL = start of screen image RAM
 073D: 54          ld   d,h
 073E: 5D          ld   e,l                   ; DE = HL
@@ -1649,10 +1649,10 @@ CROSSHAIR_PATTERN_TEST_MODE:
 075E: ED B0       ldir                       ; create grid pattern
 
 ; grid is drawn, now colour it
-0760: CD F8 35    call $35F8                 ; call COLOUR_FILL_WHITE
+0760: CD F8 35    call colour_fill_white_35f8
 
 ; wait for FIRE to be pressed
-0763: CD 86 07    call $0786                 ; call WAIT_FOR_1P_FIRE_BUTTON                 
+0763: CD 86 07    call wait_for_1p_fire_button_0786
 
 ; Fill entire screen with pixels
 0766: 21 00 44    ld   hl,$4400              ; load HL with address of screen image RAM 
@@ -1669,7 +1669,7 @@ CROSSHAIR_PATTERN_TEST_MODE:
 077E: ED B0       ldir                       ; fill attribute RAM with $11 (Red)
 
 ; wait for fire to be pressed
-0780: CD 86 07    call $0786                 ; call WAIT_FOR_1P_FIRE_BUTTON  
+0780: CD 86 07    call wait_for_1p_fire_button_0786
 
 ; it appears once you enter the crosshair test you can't exit it without switching machine off,
 ; changing DIP switches to disable test, then restarting machine 
@@ -1677,7 +1677,7 @@ CROSSHAIR_PATTERN_TEST_MODE:
 
 
 ; wait for fire button to be pressed
-WAIT_FOR_1P_FIRE_BUTTON:
+wait_for_1p_fire_button_0786:
 0786: DB 48       in   a,($48)               ; read P1 controls               
 0788: CB 67       bit  4,a                   ; test if FIRE pressed
 078A: 20 FA       jr   nz,$0786              ; jump if FIRE not pressed (remember, button is ACTIVE_LOW so is deemed pressed when bit NOT set)
@@ -1688,7 +1688,7 @@ WAIT_FOR_1P_FIRE_BUTTON:
 0790: 28 FA       jr   z,$078C               l jump if FIRE pressed to $078C
 0792: C9          ret
 
-0793: CD 7B 29    call $297B                 ; call PRINT_STRING
+0793: CD 7B 29    call print_string_297b
 0796: 
     90
     08 20         ; X/Y coordinates    
@@ -1696,27 +1696,20 @@ WAIT_FOR_1P_FIRE_BUTTON:
 0799:  59 6F 75 20 68 61 76 65 20 6A 6F 69 6E 65 64 20  You have joined 
 07A9:  74 68 65 20 69 6D 6D 6F 72 74 61 6C 73 00        the immortals..
 
-07B7: CD 7B 29    call $297B                 ; call PRINT_STRING
+07B7: CD 7B 29    call print_string_297b
 07BA: 
     90          
     0C 30         ; X/Y coordinates  
 07BD:  69 6E 20 74 68 65 20 42 45 52 5A 45 52 4B 20 68  in the BERZERK h
 07CD:  61 6C 6C 20 6F 66 20 66 61 6D 65 00              all of fame.
 
-07D9: CD 7B 29    call $297B                 ; call PRINT_STRING
+07D9: CD 7B 29    call print_string_297b
 07DC: 
     90          
     18 50         ; X/Y coordinates 
 
 07DF:  45 6E 74 65 72 20 79 6F 75 72 20 69 6E 69 74 69  Enter your initi
 07EF:  61 6C 73 3A 00                                   als:.
-
-07F4: C9          ret
-
-07FC: 09          add  hl,bc
-07FD: 05          dec  b
-07FE: 17          rla
-07FF: 05          dec  b
 
 
 ;
@@ -1951,240 +1944,21 @@ WAIT_FOR_1P_FIRE_BUTTON:
     0C  ; height in bytes 
     3C 7E FF BD BD BD 3C 24 24 64 04 06 
     
-; Explosion sprite patterns        
-1198: 
-    02  ; width in bytes
-    11  ; height in bytes 
-    00 00
-119C: 00          nop
-119D: 00          nop
-119E: 00          nop
-119F: 00          nop
-11A0: 00          nop
-11A1: 00          nop
-11A2: 00          nop
-11A3: 00          nop
-11A4: 00          nop
-11A5: 00          nop
-11A6: 03          inc  bc
-11A7: C0          ret  nz
-11A8: 07          rlca
-11A9: E0          ret  po
-11AA: 0F          rrca
-11AB: F0          ret  p
-11AC: 13          inc  de
-11AD: C8          ret  z
-11AE: 22 C4 03    ld   ($03C4),hl
-11B1: 40          ld   b,b
-11B2: 03          inc  bc
-11B3: C0          ret  nz
-11B4: 02          ld   (bc),a
-11B5: 40          ld   b,b
-11B6: 02          ld   (bc),a
-11B7: 40          ld   b,b
-11B8: 02          ld   (bc),a
-11B9: 40          ld   b,b
-11BA: 06 60       ld   b,$60
-11BC: 02          ld   (bc),a
+; Explosion sprite patterns at 1198    
+: 
+;    02  ; width in bytes
+;    11  ; height in bytes 
+;    00 00
+
 
 ;
-; Sprite
+; Sprite at 11BD
 ;
 
-11BD: 11 00 00    ld   de,$0000
-11C0: 00          nop
-11C1: 00          nop
-11C2: 00          nop
-11C3: 00          nop
-11C4: 00          nop
-11C5: 00          nop
-11C6: 03          inc  bc
-11C7: C0          ret  nz
-11C8: 06 60       ld   b,$60
-11CA: 12          ld   (de),a
-11CB: 48          ld   c,b
-11CC: 08          ex   af,af'
-11CD: 10 10       djnz $11DF
-11CF: 08          ex   af,af'
-11D0: 22 44 44    ld   ($4444),hl
-11D3: 42          ld   b,d
-11D4: 02          ld   (bc),a
-11D5: 10 03       djnz $11DA
-11D7: C0          ret  nz
-11D8: 02          ld   (bc),a
-11D9: 40          ld   b,b
-11DA: 04          inc  b
-11DB: 20 02       jr   nz,$11DF
-11DD: 40          ld   b,b
-11DE: 06 60       ld   b,$60
-11E0: 02          ld   (bc),a
 
 ;
-; Sprite
-;
+; Sprite at 11E1
 
-11E1: 13          inc  de
-11E2: 00          nop
-11E3: 00          nop
-11E4: 02          ld   (bc),a
-11E5: 00          nop
-11E6: 00          nop
-11E7: 40          ld   b,b
-11E8: 00          nop
-11E9: 08          ex   af,af'
-11EA: 10 00       djnz $11EC
-11EC: 03          inc  bc
-11ED: 00          nop
-11EE: 00          nop
-11EF: 12          ld   (de),a
-11F0: 08          ex   af,af'
-11F1: 01 80 00    ld   bc,$0080
-11F4: 08          ex   af,af'
-11F5: 02          ld   (bc),a
-11F6: 40          ld   b,b
-11F7: 02          ld   (bc),a
-11F8: 04          inc  b
-11F9: 10 23       djnz $121E
-11FB: C0          ret  nz
-11FC: 40          ld   b,b
-11FD: 04          inc  b
-11FE: 20 02       jr   nz,$1202
-1200: 00          nop
-1201: 00          nop
-1202: 80          add  a,b
-1203: 00          nop
-1204: 10 08       djnz $120E
-1206: 18 0C       jr   $1214
-1208: 01 01 00    ld   bc,$0001
-120B: 12          ld   (de),a
-120C: 2E 12       ld   l,$12
-120E: 34          inc  (hl)
-120F: 12          ld   (de),a
-1210: 3B          dec  sp
-1211: 12          ld   (de),a
-1212: 43          ld   b,e
-1213: 12          ld   (de),a
-1214: 4C          ld   c,h
-1215: 12          ld   (de),a
-1216: 56          ld   d,(hl)
-1217: 12          ld   (de),a
-1218: A7          and  a
-1219: 12          ld   (de),a
-121A: 6D          ld   l,l
-121B: 12          ld   (de),a
-121C: 79          ld   a,c
-121D: 12          ld   (de),a
-121E: 85          add  a,l
-121F: 12          ld   (de),a
-1220: 91          sub  c
-1221: 12          ld   (de),a
-1222: 9D          sbc  a,l
-1223: 12          ld   (de),a
-1224: 91          sub  c
-1225: 12          ld   (de),a
-1226: 85          add  a,l
-1227: 12          ld   (de),a
-1228: 79          ld   a,c
-1229: 12          ld   (de),a
-122A: 6D          ld   l,l
-122B: 00          nop
-122C: 17          rla
-122D: 12          ld   (de),a
-122E: 84          add  a,h
-122F: 00          nop
-1230: 01 02 18    ld   bc,$1802
-1233: 18 84       jr   $11B9
-1235: 00          nop
-1236: 01 03 10    ld   bc,$1003
-1239: 38 10       jr   c,$124B
-123B: 84          add  a,h
-123C: 00          nop
-123D: 01 04 18    ld   bc,$1804
-1240: 3C          inc  a
-1241: 3C          inc  a
-1242: 18 84       jr   $11C8
-1244: 00          nop
-1245: 01 05 38    ld   bc,$3805
-1248: 7C          ld   a,h
-1249: 7C          ld   a,h
-124A: 7C          ld   a,h
-124B: 38 84       jr   c,$11D1
-124D: 00          nop
-124E: 01 06 3C    ld   bc,$3C06
-1251: 7E          ld   a,(hl)
-1252: 7E          ld   a,(hl)
-1253: 7E          ld   a,(hl)
-1254: 7E          ld   a,(hl)
-1255: 3C          inc  a
-1256: 84          add  a,h
-1257: 00          nop
-1258: 01 07 38    ld   bc,$3807
-125B: 7C          ld   a,h
-125C: FE FE       cp   $FE
-125E: FE 7C       cp   $7C
-1260: 38 84       jr   c,$11E6
-1262: 00          nop
-1263: 01 08 3C    ld   bc,$3C08
-1266: 7E          ld   a,(hl)
-1267: FF          rst  $38
-1268: FF          rst  $38
-1269: FF          rst  $38
-126A: FF          rst  $38
-126B: 7E          ld   a,(hl)
-126C: 3C          inc  a
-126D: 82          add  a,d
-126E: 00          nop
-126F: 01 08 3C    ld   bc,$3C08
-1272: 7E          ld   a,(hl)
-1273: DB FF       in   a,($FF)
-1275: FF          rst  $38
-1276: BD          cp   l
-1277: 42          ld   b,d
-1278: 3C          inc  a
-1279: 81          add  a,c
-127A: 00          nop
-127B: 01 08 3C    ld   bc,$3C08
-127E: 7E          ld   a,(hl)
-127F: DB FF       in   a,($FF)
-1281: FF          rst  $38
-1282: BD          cp   l
-1283: 42          ld   b,d
-1284: 3C          inc  a
-1285: 80          add  a,b
-1286: 80          add  a,b
-1287: 01 08 3C    ld   bc,$3C08
-128A: 7E          ld   a,(hl)
-128B: DB FF       in   a,($FF)
-128D: FF          rst  $38
-128E: BD          cp   l
-128F: 42          ld   b,d
-1290: 3C          inc  a
-1291: 80          add  a,b
-1292: 40          ld   b,b
-1293: 01 08 3C    ld   bc,$3C08
-1296: 7E          ld   a,(hl)
-1297: DB FF       in   a,($FF)
-1299: FF          rst  $38
-129A: BD          cp   l
-129B: 42          ld   b,d
-129C: 3C          inc  a
-129D: 01 08 3C    ld   bc,$3C08
-12A0: 7E          ld   a,(hl)
-12A1: DB FF       in   a,($FF)
-12A3: FF          rst  $38
-12A4: BD          cp   l
-12A5: 42          ld   b,d
-12A6: 3C          inc  a
-12A7: 84          add  a,h
-12A8: 00          nop
-12A9: 01 08 00    ld   bc,$0008
-12AC: 00          nop
-12AD: 00          nop
-12AE: 3C          inc  a
-12AF: 7E          ld   a,(hl)
-12B0: DB FF       in   a,($FF)
-12B2: 7E          ld   a,(hl)
-12B3: 12          ld   (de),a
 
 
 
@@ -2263,60 +2037,7 @@ WAIT_FOR_1P_FIRE_BUTTON:
 
 
 
-01       jr   c,$1393
-1392: 10 18       djnz $13AC
-1394: 18 00       jr   $1396
-1396: 3C          inc  a
-1397: 5A          ld   e,d
-1398: 99          sbc  a,c
-1399: 9A          sbc  a,d
-139A: 18 18       jr   $13B4
-139C: 24          inc  h
-139D: 44          ld   b,h
-139E: 42          ld   b,d
-139F: 42          ld   b,d
-13A0: 41          ld   b,c
-13A1: 41          ld   b,c
-13A2: 80          add  a,b
-13A3: 01 10 00    ld   bc,$0010
-13A6: 18 18       jr   $13C0
-13A8: 00          nop
-13A9: 3C          inc  a
-13AA: 3A 3A 7C    ld   a,($7C3A)
-13AD: 18 18       jr   $13C7
-13AF: 28 48       jr   z,$13F9
-13B1: 4F          ld   c,a
-13B2: 41          ld   b,c
-13B3: 40          ld   b,b
-13B4: 80          add  a,b
-13B5: 01 10 18    ld   bc,$1810
-13B8: 18 00       jr   $13BA
-13BA: 3C          inc  a
-13BB: 3A 3A 7A    ld   a,($7A3A)
-13BE: 18 18       jr   $13D8
-13C0: 18 18       jr   $13DA
-13C2: 18 18       jr   $13DC
-13C4: 18 18       jr   $13DE
-13C6: 38 72       jr   c,$143A
-13C8: 20 62       jr   nz,$142C
-13CA: 6F          ld   l,a
-13CB: 75          ld   (hl),l
-13CC: 74          ld   (hl),h
-13CD: 6F          ld   l,a
-13CE: 6E          ld   l,(hl)
-13CF: 20 73       jr   nz,$1444
-13D1: 74          ld   (hl),h
-13D2: 61          ld   h,c
-13D3: 72          ld   (hl),d
-13D4: 74          ld   (hl),h
-13D5: 20 31       jr   nz,$1408
-13D7: 20 6F       jr   nz,$1448
-13D9: 75          ld   (hl),l
-13DA: 20 32       jr   nz,$140E
-13DC: 00          nop
-13DD: C9          ret
-
-13DE: CD 7B 29    call $297B                 ; call PRINT_STRING
+13DE: CD 7B 29    call print_string_297b
 13E1: 
     90          
     20 BE         ; X/Y coordinates      
@@ -2324,21 +2045,21 @@ WAIT_FOR_1P_FIRE_BUTTON:
 13F4:  65 63 6B 65 6E 00                                ecken.
 13FA: C9          ret
 
-13FB: CD 7B 29    call $297B                 ; call PRINT_STRING
+13FB: CD 7B 29    call print_string_297b
 13FE: 
     90          
     44 BE         ; X/Y coordinates  
 1401:  50 75 6C 73 61 72 20 53 74 61 72 74 00           Pulsar Start.
 140E: C9          ret
 
-140F: CD 7B 29    call $297B                 ; call PRINT_STRING
+140F: CD 7B 29    call print_string_297b
 1412: 
     90          
     58 BE         ; X/Y coordinates    
 1415:  49 6E 73 65 72 74 20 43 6F 69 6E 00              Insert Coin.
 1421: C9          ret
 
-1422: CD 7B 29    call $297B                 ; call PRINT_STRING
+1422: CD 7B 29    call print_string_297b
 1425: 
     90          
     30 BE         ; X/Y coordinates  
@@ -2346,14 +2067,14 @@ WAIT_FOR_1P_FIRE_BUTTON:
 1438:  6E 6E 61 69 65 00                                nnaie.
 143E: C9          ret
 
-143F: CD 7B 29    call $297B                 ; call PRINT_STRING
+143F: CD 7B 29    call print_string_297b
 1442: 
     90          
     48 BE         ; X/Y coordinates 
 1445:  4D 75 6E 7A 65 20 65 69 6E 77 65 72 66 65 6E 00  Munze einwerfen.
 1455: C9          ret
 
-1456: CD 7B 29    call $297B                 ; call PRINT_STRING
+1456: CD 7B 29    call print_string_297b
 1459: 
     90          
     48 BE         ; X/Y coordinates 
@@ -2463,7 +2184,7 @@ WAIT_FOR_1P_FIRE_BUTTON:
 ;
 ;
 
-HANDLE_PLAYER_BOLTS:
+handle_player_bolts_14f3:
 14F3: 06 02       ld   b,$02
 14F5: CD 05 15    call $1505
 14F8: 3A 7A 43    ld   a,($437A)
@@ -2498,9 +2219,9 @@ HANDLE_PLAYER_BOLTS:
 
 ; bolt is active
 1520: FD 34 01    inc  (iy+$01)              ; increment BOLT.Length to count how big the laser bolt is  
-1523: CD 53 15    call $1553                 ; call MOVE_AND_DRAW_BOLT
-1526: DC A0 15    call c,$15A0               ; if bolt has collided with something, call HANDLE_BOLT_COLLISION 
-1529: CD 7E 15    call $157E                 ; call CHECK_IF_BOLT_OFFSCREEN
+1523: CD 53 15    call move_and_draw_bolt_1553
+1526: DC A0 15    call c,handle_bolt_collision_15a0               ; if bolt has collided with something,
+1529: CD 7E 15    call check_if_bolt_offscreen_157e
 152C: 01 04 00    ld   bc,$0004
 152F: FD 09       add  iy,bc
 1531: FD 35 01    dec  (iy+$01)
@@ -2514,8 +2235,8 @@ HANDLE_PLAYER_BOLTS:
 1541: CA 4A 15    jp   z,$154A
 
 ; erase the bolt
-1544: CD 53 15    call $1553                 ; call MOVE_AND_DRAW_BOLT
-1547: CD 7E 15    call $157E                 ; call CHECK_IF_BOLT_OFFSCREEN
+1544: CD 53 15    call move_and_draw_bolt_1553
+1547: CD 7E 15    call check_if_bolt_offscreen_157e
 
 154A: FD 35 FD    dec  (iy-$03)              ; decrement BOLT.Length
 154D: C0          ret  nz
@@ -2535,7 +2256,7 @@ HANDLE_PLAYER_BOLTS:
 ; Returns:
 ; Carry set if the bolt has hit something such as a wall or enemy robot
 
-MOVE_AND_DRAW_BOLT: 
+move_and_draw_bolt_1553:
 1553: 0F          rrca                       ; move DURL bit for LEFT into carry
 1554: D2 5A 15    jp   nc,$155A              ; if this bit isn't set, the bolt isn't moving left, goto $155A
 
@@ -2562,7 +2283,7 @@ MOVE_AND_DRAW_BOLT:
 
 156F: FD 66 03    ld   h,(iy+$03)            ; load H with BOLT.Y
 1572: FD 6E 02    ld   l,(iy+$02)            ; load L with BOLT.PX
-1575: CD A1 29    call $29A1                 ; call RTOAX to get Magic RAM address and set XOR pixel mode
+1575: CD A1 29    call rtoax_29a1                 ;  to get Magic RAM address and set XOR pixel mode
 1578: 36 80       ld   (hl),$80              ; write a single pixel for the bolt              
 157A: DB 4E       in   a,($4E)               ; test if the pixel plotted tripped the collision detection hardware
 157C: 07          rlca                       ; if carry is set, pixel was plotted onto another pixel (a collision)
@@ -2575,14 +2296,14 @@ MOVE_AND_DRAW_BOLT:
 ; IY = pointer to BOLT structure
 ;
 
-CHECK_IF_BOLT_OFFSCREEN:
+check_if_bolt_offscreen_157e:
 157E: FD 7E 02    ld   a,(iy+$02)            ; A = BOLT.PX   
 1581: FD 46 00    ld   b,(iy+$00)            ; B = BOLT.Direction 
 1584: 11 FF 03    ld   de,$03FF
-1587: CD 97 15    call $1597                 ; call CHECK_IF_ZERO_OR_E
+1587: CD 97 15    call check_if_zero_or_e_1597
 158A: FD 7E 03    ld   a,(iy+$03)            ; A = BOLT.Y
 158D: 11 D0 0C    ld   de,$0CD0
-1590: CD 97 15    call $1597                 ; call CHECK_IF_ZERO_OR_E
+1590: CD 97 15    call check_if_zero_or_e_1597
 1593: FD 70 00    ld   (iy+$00),b            ; set BOLT.Direction
 1596: C9          ret
 
@@ -2599,7 +2320,7 @@ CHECK_IF_BOLT_OFFSCREEN:
 ; Otherwise, B is same as on entry to routine (ie: left untouched).
 ;
 
-CHECK_IF_ZERO_OR_E:
+check_if_zero_or_e_1597:
 1597: FE 00       cp   $00                   ; is value == 0?
 1599: 28 02       jr   z,$159D               ; yes, set B to 0
 159B: BB          cp   e                     ; is value == E?
@@ -2615,12 +2336,12 @@ CHECK_IF_ZERO_OR_E:
 ; IY = pointer to BOLT structure 
 
 ; Deactivate the bolt. It's hit something - maybe just a wall.
-HANDLE_BOLT_COLLISION:
+handle_bolt_collision_15a0:
 15A0: FD 36 00 00 ld   (iy+$00),$00          ; Set BOLT.Direction to 0, meaning "Inactive"
 
 ; check if the bolt has hit the player
 15A4: DD 2A 76 08 ld   ix,($0876)            ; load IX with contents of MAN_PTR
-15A8: CD CB 15    call $15CB                 ; call COLLISION_DETECTION
+15A8: CD CB 15    call collision_detection_15cb
 
 ; Now check if the bolt has hit any robots
 15AB: ED 4B 70 08 ld   bc,($0870)            ; load HL with contents of V.PTR
@@ -2631,7 +2352,7 @@ HANDLE_BOLT_COLLISION:
 ; BC = pointer to VECTOR structure for robot
 15B3: C5          push bc                    ; We want to make IX = BC. There's no ld ix,bc instruction so...
 15B4: DD E1       pop  ix                    ; IX = pointer to vector structure for robot
-15B6: CD CB 15    call $15CB                 ; call COLLISION_DETECTION
+15B6: CD CB 15    call collision_detection_15cb
 15B9: DD 66 FF    ld   h,(ix-$01)
 15BC: DD 6E FE    ld   l,(ix-$02)
 15BF: E5          push hl
@@ -2655,7 +2376,7 @@ HANDLE_BOLT_COLLISION:
 ; Remarks:
 ; See also: HITCHK in bolts.asm within Frenzy's source code.
 
-COLLISION_DETECTION:
+collision_detection_15cb:
 15CB: DD CB 00 56 bit  2,(ix+$00)            ; test MOVE bit of VECTOR.Status
 15CF: C8          ret  z                     ; exit if not moving
 15D0: DD 66 0B    ld   h,(ix+$0b)            
@@ -2764,7 +2485,7 @@ COLLISION_DETECTION:
 1668: 22 00 44    ld   ($4400),hl
 166B: 32 02 44    ld   ($4402),a
 166E: 31 00 43    ld   sp,$4300
-1671: CD 22 1E    call $1E22                 ; call CREATE_JOB
+1671: CD 22 1E    call create_job_1e22
 1674: FD 2A 72 08 ld   iy,($0872)
 1678: CD F1 22    call $22F1
 167B: CD AB 26    call $26AB
@@ -2793,7 +2514,7 @@ COLLISION_DETECTION:
 16B7: E1          pop  hl
 16B8: F5          push af
 16B9: 22 5C 43    ld   ($435C),hl
-16BC: CD 78 26    call $2678                 ; call RANDOM
+16BC: CD 78 26    call random_2678
 16BF: 2A 73 43    ld   hl,($4373)
 16C2: 22 3E 43    ld   ($433E),hl
 16C5: 2A 74 43    ld   hl,($4374)
@@ -2876,7 +2597,7 @@ COLLISION_DETECTION:
 ;
 ; See also: NMI.ASM in Frenzy's source code
 
-nmi_handler_1721:
+nmi_1721:
 1721: ED 73 5E 08 ld   ($085E),sp            ; preserve stack pointer in NMI_STACK_PTR
 1725: 31 5E 08    ld   sp,$085E
 1728: F5          push af
@@ -2891,7 +2612,7 @@ nmi_handler_1721:
 1735: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 1738: B7          or   a
 1739: CC 12 1D    call z,$1D12
-173C: CD 76 17    call $1776                 ; call CLOAD
+173C: CD 76 17    call cload_1776
 
 ; Do voice if not demo - This section of code is replicated in Frenzy. 
 173F: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
@@ -2920,7 +2641,7 @@ nmi_handler_1721:
 1760: 18 E6       jr   $1748                 ; do another byte for speech
 
 ; stop talking 
-stop_talking_1762:
+stop_1762:
 1762: 21 00 00    ld   hl,$0000              ; NULL pointer 
 
 1765: 22 98 08    ld   ($0898),hl            ; update VOICE_PC
@@ -2948,7 +2669,7 @@ stop_talking_1762:
 ; See also: 
 ; C.LOAD within NMI.ASM in Frenzy's source code.
 
-CLOAD:
+cload_1776:
 1776: 21 78 08    ld   hl,$0878              ; load HL with address of TCR1
 1779: 46          ld   b,(hl)
 177A: 23          inc  hl                    ; bump HL to point to TCR2
@@ -3013,16 +2734,16 @@ V.LOOP:
 
 17B8: 06 06       ld   b,$06
 17BA: 21 BE 08    ld   hl,$08BE              ; load HL with address of CMOS_NUM_PLAYS
-17BD: CD B3 2D    call $2DB3                 ; call INCREMENT_BY_1
+17BD: CD B3 2D    call increment_by_1_2db3
 17C0: 3A 76 43    ld   a,($4376)             ; read NUMBER_OF_PLAYERS
 17C3: FE 02       cp   $02
-17C5: CC B3 2D    call z,$2DB3               ; call INCREMENT_BY_1
+17C5: CC B3 2D    call z,increment_by_1_2db3
 17C8: CD 51 18    call $1851
 17CB: 01 0C 00    ld   bc,$000C
 17CE: 11 44 43    ld   de,$4344
 17D1: 21 7F 18    ld   hl,$187F              ; load HL with address of DEFAULT_PLAYER_STATE
 17D4: ED B0       ldir
-17D6: CD 78 26    call $2678                 ; call RANDOM
+17D6: CD 78 26    call random_2678
 17D9: 2A 5C 43    ld   hl,($435C)
 17DC: 22 45 43    ld   ($4345),hl
 17DF: AF          xor  a
@@ -3054,7 +2775,7 @@ V.LOOP:
 1819: 3E E0       ld   a,$E0
 181B: 32 47 43    ld   ($4347),a             ; set MAN_X
 181E: CD 9D 20    call $209D
-1821: CD 78 26    call $2678                 ; call RANDOM
+1821: CD 78 26    call random_2678
 1824: 2A 5C 43    ld   hl,($435C)
 1827: 22 45 43    ld   ($4345),hl
 182A: 3E 5A       ld   a,$5A
@@ -3105,7 +2826,7 @@ V.LOOP:
 ; Default player state
 ;
 
-DEFAULT_PLAYER_STATE:
+default_player_state_187f:
 187F: 01 00 00    ld   bc,$0000
 1882: 1E 64       ld   e,$64
 1884: 03          inc  bc
@@ -3136,11 +2857,11 @@ DEFAULT_PLAYER_STATE:
 18B1: C9          ret
 
 18B2: 6F          ld   l,a
-18B3: CD F1 18    call $18F1                 ; call DECREMENT_CREDITS
+18B3: CD F1 18    call decrement_credits_18f1
 18B6: CB 4D       bit  1,l
 18B8: 3E 01       ld   a,$01
 18BA: 28 05       jr   z,$18C1
-18BC: CD F1 18    call $18F1                 ; call DECREMENT_CREDITS
+18BC: CD F1 18    call decrement_credits_18f1
 18BF: 3E 02       ld   a,$02
 18C1: 32 76 43    ld   ($4376),a
 18C4: 2A 72 08    ld   hl,($0872)
@@ -3154,15 +2875,15 @@ DEFAULT_PLAYER_STATE:
 ; See also: CREDS in coins.asm within Frenzy's source code.
 ;
 
-PRINT_CREDITS:
+print_credits_18cd:
 18CD: E5          push hl                    ; create space for a word on the stack
 18CE: 21 00 00    ld   hl,$0000
 18D1: 39          add  hl,sp                 ; HL = SP
-18D2: CD E0 18    call $18E0                 ; call GET_CREDITS_AS_BCD
+18D2: CD E0 18    call get_credits_as_bcd_18e0
 18D5: 77          ld   (hl),a                ; write number of credits to our temp space on stack
 18D6: 06 02       ld   b,$02                 ; You can have up to 99 credits, so 2 digits long.
 18D8: 11 78 D5    ld   de,$D578              ; D = Y coordinate, E = X coordinate
-18DB: CD 40 2A    call $2A40                 ; call PRINT_DIGITS
+18DB: CD 40 2A    call print_digits_2a40
 18DE: E1          pop  hl                    ; discard temp space on stack 
 18DF: C9          ret
 
@@ -3174,7 +2895,7 @@ PRINT_CREDITS:
 ;
 ; See also: Getc in coins.asm within Frenzy's source code.
 
-GET_CREDITS_AS_BCD:
+get_credits_as_bcd_18e0:
 18E0: 3A A5 08    ld   a,($08A5)             ; load HL with address of CMOS_CREDITS+1
 18E3: 0F          rrca                       ; move upper nibble..
 18E4: 0F          rrca
@@ -3194,8 +2915,8 @@ GET_CREDITS_AS_BCD:
 ; See also: DECCRD in coins.asm within Frenzy's source code.
 ; 
 
-DECREMENT_CREDITS:
-18F1: CD E0 18    call $18E0                 ; call GET_CREDITS_AS_BCD
+decrement_credits_18f1:
+18F1: CD E0 18    call get_credits_as_bcd_18e0
 18F4: C6 99       add  a,$99                 ; add -1 in 9's complement arithmetic
 18F6: 27          daa
 18F7: 4F          ld   c,a                   ; Preserve A in C
@@ -3228,7 +2949,7 @@ DECREMENT_CREDITS:
 1916: 21 A6 08    ld   hl,$08A6
 1919: 19          add  hl,de
 191A: 06 08       ld   b,$08
-191C: CD B3 2D    call $2DB3                 ; call INCREMENT_BY_1
+191C: CD B3 2D    call increment_by_1_2db3
 191F: E1          pop  hl
 1920: E5          push hl
 1921: 11 05 00    ld   de,$0005
@@ -3257,7 +2978,7 @@ DECREMENT_CREDITS:
 1944: C6 00       add  a,$00
 1946: 27          daa
 1947: 57          ld   d,a
-1948: CD E0 18    call $18E0                 ; call GET_CREDITS_AS_BCD
+1948: CD E0 18    call get_credits_as_bcd_18e0
 194B: FE 99       cp   $99
 194D: 28 09       jr   z,$1958
 194F: 82          add  a,d
@@ -3293,21 +3014,21 @@ DECREMENT_CREDITS:
 1976: 21 11 21    ld   hl,$2111
 1979: 11 32 C5    ld   de,$C532
 197C: 21 9C 08    ld   hl,$089C
-197F: CD E0 18    call $18E0                 ; call GET_CREDITS_AS_BCD
+197F: CD E0 18    call get_credits_as_bcd_18e0
 1982: F5          push af
 1983: 01 62 03    ld   bc,$0362
 1986: CD 08 19    call $1908
 1989: 23          inc  hl
 198A: 0C          inc  c
 198B: 10 F9       djnz $1986
-198D: CD E0 18    call $18E0                 ; call GET_CREDITS_AS_BCD
+198D: CD E0 18    call get_credits_as_bcd_18e0
 1990: C1          pop  bc
 1991: B8          cp   b
 1992: C4 CD 18    call nz,$18CD
 1995: C1          pop  bc
 1996: C9          ret
 
-1997: CD E0 18    call $18E0                 ; call GET_CREDITS_AS_BCD
+1997: CD E0 18    call get_credits_as_bcd_18e0
 199A: 2E 00       ld   l,$00
 199C: B7          or   a
 199D: 28 08       jr   z,$19A7
@@ -3322,9 +3043,9 @@ DECREMENT_CREDITS:
 
 
 ; Definitely called
-19AC: CD 4E 1A    call $1A4E                 ; call CLEAR_SCREEN
-19AF: CD AF 35    call $35AF                 ; call SET_COLOUR_ATTRS_35AF
-19B2: CD 7B 29    call $297B                 ; call PRINT_STRING
+19AC: CD 4E 1A    call clear_screen_1a4e
+19AF: CD AF 35    call set_35af
+19B2: CD 7B 29    call print_string_297b
 19B5: 
     90 
     0C BE         ; X/Y coordinates
@@ -3333,8 +3054,8 @@ DECREMENT_CREDITS:
 19C8:  74 72 6F 6E 69 63 73 2C 20 49 6E 63 2E 00        tronics, Inc.
 
 19D6: CD CD 18    call $18CD
-19D9: CD 14 23    call $2314                 ; call SHOW_SCORE
-19DC: CD ED 1A    call $1AED                 ; call LTABLE
+19D9: CD 14 23    call show_score_2314
+19DC: CD ED 1A    call ltable_1aed
 19DF: 04          inc  b
 19E0: 1B          dec  de
 19E1: 2D          dec  l
@@ -3363,7 +3084,7 @@ DECREMENT_CREDITS:
 
 1A01: 21 00 43    ld   hl,$4300
 1A04: 06 02       ld   b,$02
-1A06: CD 40 2A    call $2A40                 ; call PRINT_DIGITS
+1A06: CD 40 2A    call print_digits_2a40
 1A09: 13          inc  de
 1A0A: E1          pop  hl
 1A0B: 06 06       ld   b,$06
@@ -3371,15 +3092,15 @@ DECREMENT_CREDITS:
 1A10: 13          inc  de
 1A11: AF          xor  a
 1A12: 4E          ld   c,(hl)
-1A13: CD DB 29    call $29DB                 ; call PRINT_CHAR
+1A13: CD DB 29    call print_char_29db
 1A16: 13          inc  de
 1A17: 23          inc  hl
 1A18: 4E          ld   c,(hl)
-1A19: CD DB 29    call $29DB                 ; call PRINT_CHAR
+1A19: CD DB 29    call print_char_29db
 1A1C: 13          inc  de
 1A1D: 23          inc  hl
 1A1E: 4E          ld   c,(hl)
-1A1F: CD DB 29    call $29DB                 ; call PRINT_CHAR
+1A1F: CD DB 29    call print_char_29db
 1A22: 23          inc  hl
 1A23: D1          pop  de
 1A24: 7A          ld   a,d
@@ -3392,9 +3113,9 @@ DECREMENT_CREDITS:
 1A31: FE 11       cp   $11
 1A33: C2 F2 19    jp   nz,$19F2
 1A36: 21 00 46    ld   hl,$4600
-1A39: CD 45 1A    call $1A45                 ; call WRITE_FF_64_TIMES_HL
+1A39: CD 45 1A    call write_ff_64_times_hl_1a45
 1A3C: 21 00 5B    ld   hl,$5B00
-1A3F: CD 45 1A    call $1A45                 ; call WRITE_FF_64_TIMES_HL
+1A3F: CD 45 1A    call write_ff_64_times_hl_1a45
 1A42: 21 80 5D    ld   hl,$5D80
 
 
@@ -3404,7 +3125,7 @@ DECREMENT_CREDITS:
 ; Expects:
 ; HL = start memory address
 
-WRITE_FF_64_TIMES_HL:
+write_ff_64_times_hl_1a45:
 1A45: 3E FF       ld   a,$FF
 1A47: 06 40       ld   b,$40
 1A49: 77          ld   (hl),a
@@ -3419,7 +3140,7 @@ WRITE_FF_64_TIMES_HL:
 
 ; fill colour RAM with 0
 
-CLEAR_SCREEN:
+clear_screen_1a4e:
 1A4E: 21 00 81    ld   hl,$8100
 1A51: 01 00 07    ld   bc,$0700
 1A54: AF          xor  a
@@ -3478,13 +3199,13 @@ CLEAR_SCREEN:
 
 
 
-1A98: CD DD 1A    call $1ADD                 ; call CLEAR_CHYRON
-1A9B: CD E0 18    call $18E0                 ; call GET_CREDITS_AS_BCD
+1A98: CD DD 1A    call clear_chyron_1add
+1A9B: CD E0 18    call get_credits_as_bcd_18e0
 1A9E: 28 21       jr   z,$1AC1
 1AA0: 3D          dec  a
 1AA1: 28 0F       jr   z,$1AB2
 1AA3: CD 13 36    call $3613
-1AA6: CD ED 1A    call $1AED                 ; call LTABLE
+1AA6: CD ED 1A    call ltable_1aed
 1AA9: 
     94 1B         ; $1B94: Push 1 or 2 player start button
     DE 1B         ; $1BDE: Startknoepfe druecken.  
@@ -3492,7 +3213,7 @@ CLEAR_SCREEN:
     FB 1B         ; $1BFB: Pulsar Start. 
 1AB1: C9          ret
 1AB2: CD 0A 36    call $360A
-1AB5: CD ED 1A    call $1AED                 ; call LTABLE
+1AB5: CD ED 1A    call ltable_1aed
 1AB8: 
     54 1B         ; $1B54: Push 1 Player Start Button. 
     DE 1B         ; $1BDE: Startknoepfe druecken.
@@ -3500,7 +3221,7 @@ CLEAR_SCREEN:
     FB 1B         ; $1BFB: Pulsar Start. 
 1AC0: C9          ret
 1AC1: CD 01 36    call $3601                 
-1AC4: CD ED 1A    call $1AED                 ; call LTABLE 
+1AC4: CD ED 1A    call ltable_1aed
 1AC7: 
     0F 1C         ; $1C0F: Insert Coin.      
     3F 1C         ; $1C3F: Munze einwerfen. 
@@ -3513,7 +3234,7 @@ CLEAR_SCREEN:
 1AD5: C9          ret
 
 
-COINS_DETECTED_IN_POCKET:
+coins_detected_in_pocket_1ad6:
 1AD6: 
     65            
     10            ; COINS
@@ -3531,7 +3252,7 @@ COINS_DETECTED_IN_POCKET:
 ; Remarks: 
 ; named LERASE (erase line for messages) in gameover.asm within Frenzy's source code.
 ;
-CLEAR_CHYRON:
+clear_chyron_1add:
 1ADD: 21 C0 5B    ld   hl,$5BC0
 1AE0: 01 C0 02    ld   bc,$02C0
 1AE3: AF          xor  a
@@ -3550,7 +3271,7 @@ CLEAR_CHYRON:
 ; Named LTABLE in gameover.asm within Frenzy's source code.
 ;
 
-LTABLE:
+ltable_1aed:
 1AED: E1          pop  hl                    ; get table address
 1AEE: 54          ld   d,h
 1AEF: 5D          ld   e,l                   ; save table address in DE
@@ -3571,7 +3292,7 @@ LTABLE:
 1B02: 6F          ld   l,a
 1B03: E9          jp   (hl)
 
-1B04: CD 7B 29    call $297B                 ; call PRINT_STRING
+1B04: CD 7B 29    call print_string_297b
 1B07: 
     90          
     58 00         ; X/Y coordinates          
@@ -3579,7 +3300,7 @@ LTABLE:
 
 1B16: C9          ret
 
-1B17: CD 7B 29    call $297B                 ; call PRINT_STRING
+1B17: CD 7B 29    call print_string_297b
 1B1A: 
     90          
     48 00         ; X/Y coordinates             
@@ -3587,7 +3308,7 @@ LTABLE:
 
 1B2C: C9          ret
 
-1B2D: CD 7B 29    call $297B                 ; call PRINT_STRING
+1B2D: CD 7B 29    call print_string_297b
 1B30: 
     90          
     40 00         ; X/Y coordinates           
@@ -3596,7 +3317,7 @@ LTABLE:
 
 1B44: C9          ret
 
-1B45: CD 7B 29    call $297B                 ; call PRINT_STRING
+1B45: CD 7B 29    call print_string_297b
 1B48: 
     90          
     5C 00         ; X/Y coordinates  
@@ -3604,7 +3325,7 @@ LTABLE:
 
 1B53: C9          ret
 
-1B54: CD 7B 29    call $297B                 ; call PRINT_STRING
+1B54: CD 7B 29    call print_string_297b
 1B57: 
     90          
     14 BE         ; X/Y coordinates  
@@ -3612,7 +3333,7 @@ LTABLE:
 1B6A:  61 72 74 20 42 75 74 74 6F 6E 00                 art Button.
 1B75: C9          ret
 
-1B76: CD 7B 29    call $297B                 ; call PRINT_STRING
+1B76: CD 7B 29    call print_string_297b
 1B79: 
     90
     24 BE         ; X/Y coordinates 
@@ -3620,7 +3341,7 @@ LTABLE:
 1B8C:  74 61 72 74 20 31 00                             tart 1.
 1B93: C9          ret
 
-1B94: CD 7B 29    call $297B                 ; call PRINT_STRING
+1B94: CD 7B 29    call print_string_297b
 1B97: 
     90          
     04 BE         ; X/Y coordinates 
@@ -3628,7 +3349,7 @@ LTABLE:
 1BAA:  65 72 20 53 74 61 72 74 20 42 75 74 74 6F 6E 00  er Start Button.
 1BBA: C9          ret
 
-1BBB: CD 7B 29    call $297B                 ; call PRINT_STRING
+1BBB: CD 7B 29    call print_string_297b
 1BBE: 
     90          
     10 BE         ; X/Y coordinates 
@@ -3636,7 +3357,7 @@ LTABLE:
 1BD1:  74 61 72 74 20 31 20 6F 75 20 32 00              tart 1 ou 2.
 1BDD: C9          ret
 
-1BDE: CD 7B 29    call $297B                 ; call PRINT_STRING
+1BDE: CD 7B 29    call print_string_297b
 1BE1: 
     90          
     20 BE         ; X/Y coordinates
@@ -3644,21 +3365,21 @@ LTABLE:
 1BF4:  65 63 6B 65 6E 00 C9 CD 7B 29 90 44 BE 50 75 6C  ecken.
 1BFA: C9          ret
 
-1BFB: CD 7B 29    call $297B                 ; call PRINT_STRING
+1BFB: CD 7B 29    call print_string_297b
 1BFE: 
     90          
     44 BE         ; X/Y coordinates 
 1C01:  50 75 6C 73 61 72 20 53 74 61 72 74 00           Pulsar Start.
 1C0E: C9          ret
 
-1C0F: CD 7B 29    call $297B                 ; call PRINT_STRING
+1C0F: CD 7B 29    call print_string_297b
 1C12: 
     90          
     58 BE         ; X/Y coordinates 
 1C15:  49 6E 73 65 72 74 20 43 6F 69 6E 00              Insert Coin.
 1C21: C9          ret
 
-1C22: CD 7B 29    call $297B                 ; call PRINT_STRING
+1C22: CD 7B 29    call print_string_297b
 1C25: 
     90          
     30 BE         ; X/Y coordinates 
@@ -3666,14 +3387,14 @@ LTABLE:
 1C38:  6E 6E 61 69 65 00                                nnaie.          
 1C3E: C9          ret
 
-1C3F: CD 7B 29    call $297B                 ; call PRINT_STRING
+1C3F: CD 7B 29    call print_string_297b
 1C42: 
     90
     48 BE         ; X/Y coordinates 
 1C45:  4D 75 6E 7A 65 20 65 69 6E 77 65 72 66 65 6E 00  Munze einwerfen.
 1C55: C9          ret
 
-1C56: CD 7B 29    call $297B                 ; call PRINT_STRING
+1C56: CD 7B 29    call print_string_297b
 1C59: 
     90
     48 BE         ; X/Y coordinates 
@@ -4024,7 +3745,7 @@ LTABLE:
 ; Am fairly sure this is a job scheduling algorithm. 
 ; Frenzy uses a different job system entirely.
 
-CREATE_JOB:
+create_job_1e22:
 1E22: E1          pop  hl                    ; pull return address from stack
 1E23: D9          exx                        ; swap to alternate register set   
 1E24: 21 01 00    ld   hl,$0001              
@@ -4089,13 +3810,13 @@ CREATE_JOB:
 ; A = delay
 ;
 
-ACTIVATE_HEAD_JOB:
+activate_head_job_1e6d:
 1E6D: FD 2A 72 08 ld   iy,($0872)            ; load IY with pointer to head of linked list
 1E71: FD 77 01    ld   (iy+$01),a            ; update LINKED_LIST_ITEM.Delay
 1E74: FD 36 00 82 ld   (iy+$00),$82          ; update LINKED_LIST_ITEM.Flags
 
 
-STOP_JOB:
+stop_job_1e78:
 1E78: FD 2A 72 08 ld   iy,($0872)
 1E7C: 21 00 00    ld   hl,$0000
 1E7F: 39          add  hl,sp                 ; HL = SP
@@ -4126,10 +3847,10 @@ STOP_JOB:
 ;
 ; See also: MAN in man.asm within Frenzy's source code.
 
-MAN:
-1EA9: CD D4 1F    call $1FD4                 ; call MAN_INIT
+man_1ea9:
+1EA9: CD D4 1F    call man_init_1fd4
 1EAC: DD 36 00 16 ld   (ix+$00),$16          ; set STATUS_BIT_COLOR + STATUS_BIT_WRITE + STATUS_BIT_WRITE
-1EB0: CD 22 1E    call $1E22                 ; call CREATE_JOB
+1EB0: CD 22 1E    call create_job_1e22
 1EB3: C5          push bc
 1EB4: FD 21 8B 1E ld   iy,$1E8B              
 1EB8: CD 59 1E    call $1E59
@@ -4152,7 +3873,7 @@ MAN:
 1ED7: 28 16       jr   z,$1EEF               ; if bit 7 not set, A is a DURL bit, move player sprite accordingly      
 1ED9: CB BF       res  7,a
 1EDB: C5          push bc
-1EDC: CD 6D 1E    call $1E6D                 ; call ACTIVATE_HEAD_JOB
+1EDC: CD 6D 1E    call activate_head_job_1e6d
 1EDF: 18 DA       jr   $1EBB
 
 
@@ -4163,7 +3884,7 @@ MAN:
 ; Remarks:
 ; See also S.STICK in control.asm within Frenzy's source code.
 
-move_player_1ee1:
+move_1ee1:
 1EE1: 3A 79 43    ld   a,($4379)             ; read FLIP
 1EE4: B7          or   a					 ; is upright cabinet?
 1EE5: 28 04       jr   z,$1EEB				 ; yes, goto $1EEB
@@ -4180,7 +3901,7 @@ move_player_1ee1:
 1EF2: 20 0D       jr   nz,try_fire_1f01              ; fire button pressed, goto try_fire_1f01
 1EF4: E6 0F       and  $0F                   ; mask in left,right,up,down bits and discard rest
 1EF6: B9          cp   c                     ; compare to last direction player moved.
-1EF7: C4 91 1F    call nz,$1F91              ; if the player has changed direction, call CHANGE_PLAYER_DIRECTION
+1EF7: C4 91 1F    call nz,change_player_direction_1f91              ; if the player has changed direction,
 1EFA: C5          push bc
 1EFB: CD 78 1E    call $1E78
 1EFE: C3 BB 1E    jp   $1EBB
@@ -4195,7 +3916,7 @@ move_player_1ee1:
 ; 
 ; See also: TRY.F in Frenzy's MAN.ASM source.
 
-try_fire_1f01:
+try_1f01:
 1F01: FD CB 00 4E bit  1,(iy+$00)
 1F05: 20 F3       jr   nz,$1EFA
 1F07: AF          xor  a
@@ -4224,7 +3945,7 @@ fire_1f1b:
 1F1E: CA FA 1E    jp   z,$1EFA               ; if joystick in "neutral" position, don't shoot
 
 ; Fire a bolt
-1F21: CD BD 33    call $33BD                 ; play bolt shooting sound
+1F21: CD BD 33    call sfire_33bd                 ; play bolt shooting sound
 1F24: 4F          ld   c,a                   ; preserve DURL bits in A
 1F25: 21 42 20    ld   hl,$2042              ; load HL with address of D.TAB
 1F28: 06 00       ld   b,$00
@@ -4283,7 +4004,7 @@ fire_1f1b:
 1F7C: FD 36 05 08 ld   (iy+$05),$08          ; set BOLT.MaxLength
 1F80: FB          ei
 1F81: 3E 08       ld   a,$08                 ; delay before man is allowed to shoot again.
-1F83: CD 6D 1E    call $1E6D                 ; call ACTIVATE_HEAD_JOB
+1F83: CD 6D 1E    call activate_head_job_1e6d
 1F86: FD CB 00 CE set  1,(iy+$00)
 1F8A: FD 36 01 0C ld   (iy+$01),$0C
 1F8E: C3 BB 1E    jp   $1EBB
@@ -4300,12 +4021,12 @@ fire_1f1b:
 ; See also: CHANGE within man.asm in Frenzy's source code.
 ;
 
-CHANGE_PLAYER_DIRECTION:
+change_player_direction_1f91:
 1F91: 4F          ld   c,a                   ; set C to "track" stick movement
 1F92: E6 0F       and  $0F
 
-CDIR:
-1F94: CD 3D 2B    call $2B3D                 ; call SET_VELOCITY. Now DE = offset into P.TAB table
+cdir_1f94:
+1F94: CD 3D 2B    call set_velocity_2b3d                 ; . Now DE = offset into P.TAB table
 1F97: 21 53 20    ld   hl,$2053              ; load HL with address of P.TAB
 1F9A: 19          add  hl,de                 ; HL now is pointer to pattern table for player's direction
 1F9B: 7E          ld   a,(hl)                ; 
@@ -4323,14 +4044,14 @@ CDIR:
 ; Remarks:
 ; See also DEAD in man.asm within Frenzy's source code. 
 
-player_dead_1fa7:
+player_1fa7:
 1FA7: CD 39 34    call sfry_3439                 ; play sound of player being electrocuted 
 1FAA: 3E 10       ld   a,$10                 ; set direction bits 
-1FAC: CD 94 1F    call $1F94                 ; call CDIR 
+1FAC: CD 94 1F    call cdir_1f94
 1FAF: DD CB 00 EE set  5,(ix+$00)
-1FB3: CD 1F 2C    call $2C1F                 ; call SAY_GOT_THE_HUMANOID_GOT_THE_INTRUDER
+1FB3: CD 1F 2C    call say_got_the_humanoid_got_the_intruder_2c1f
 1FB6: 3E 2D       ld   a,$2D                 ; set timer for how long the frying lasts!
-1FB8: CD 6D 1E    call $1E6D                 ; call ACTIVATE_HEAD_JOB
+1FB8: CD 6D 1E    call activate_head_job_1e6d
 
 ; 
 1FBB: FD 7E 01    ld   a,(iy+$01)
@@ -4353,7 +4074,7 @@ player_dead_1fa7:
 ; See also: M.INIT in man.asm within Frenzy's source code.
 ;
 
-MAN_INIT:
+man_init_1fd4:
 1FD4: FD E1       pop  iy                   ; pop return address off stack into IY
 
 ; Allocate and zero 14 bytes on the stack for player's VECTOR 
@@ -4381,7 +4102,7 @@ MAN_INIT:
 1FFA: DD 75 07    ld   (ix+$07),l            ; set VECTOR.P.X
 1FFD: DD 74 09    ld   (ix+$09),h            ; set VECTOR.P.Y 
 2000: AF          xor  a
-2001: CD 91 1F    call $1F91                 ; call CHANGE_PLAYER_DIRECTION
+2001: CD 91 1F    call change_player_direction_1f91
 2004: DD 36 0D 02 ld   (ix+$0d),$02          ; set VECTOR.TPRIME
 2008: DD 36 0C 01 ld   (ix+$0c),$01          ; set VECTOR.TIME
 200C: FD E9       jp   (iy)                  ; jump to return address popped @ $1fd4
@@ -4390,7 +4111,7 @@ MAN_INIT:
 ;
 ; Allocate space on the stack for a robot's VECTOR 
 ;
-ALLOCATE_FOR_ROBOT_VECTOR:
+allocate_for_robot_vector_200e:
 200E: E1          pop  hl                    ; pop return address off stack
 200F: D9          exx
 
@@ -4575,7 +4296,7 @@ SR.TAB:
     00          
 
 
-209D: CD 4E 1A    call $1A4E                 ; call CLEAR_SCREEN
+209D: CD 4E 1A    call clear_screen_1a4e
 20A0: CD 40 25    call $2540
 20A3: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 20A6: B7          or   a
@@ -4635,7 +4356,7 @@ SR.TAB:
 211C: 4F          ld   c,a
 211D: 3A 4A 43    ld   a,($434A)
 2120: 47          ld   b,a
-2121: CD 78 26    call $2678                 ; call RANDOM
+2121: CD 78 26    call random_2678
 2124: B8          cp   b
 2125: 38 1E       jr   c,$2145
 2127: 21 A0 23    ld   hl,$23A0
@@ -4644,11 +4365,11 @@ SR.TAB:
 212D: 46          ld   b,(hl)
 212E: 23          inc  hl
 212F: 4E          ld   c,(hl)
-2130: CD 78 26    call $2678                 ; call RANDOM
+2130: CD 78 26    call random_2678
 2133: E6 1F       and  $1F
 2135: 80          add  a,b
 2136: 47          ld   b,a
-2137: CD 78 26    call $2678                 ; call RANDOM
+2137: CD 78 26    call random_2678
 213A: E6 1F       and  $1F
 213C: 81          add  a,c
 213D: 4F          ld   c,a
@@ -4688,7 +4409,7 @@ SR.TAB:
 218D: 3A 6D 43    ld   a,($436D)             ; read UPDATE flag
 2190: B7          or   a                     ; has score changed?
 2191: 28 03       jr   z,$2196               ; if not, goto $2196
-2193: CD 14 23    call $2314                 ; call SHOW_SCORE
+2193: CD 14 23    call show_score_2314
 
 2196: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 2199: B7          or   a
@@ -4707,9 +4428,9 @@ SR.TAB:
 21BA: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 21BD: B7          or   a
 21BE: 20 06       jr   nz,$21C6
-21C0: CD B3 2D    call $2DB3                 ; call INCREMENT_BY_1
+21C0: CD B3 2D    call increment_by_1_2db3
 21C3: CD 97 2B    call $2B97
-21C6: CD 78 26    call $2678                 ; call RANDOM
+21C6: CD 78 26    call random_2678
 21C9: CD 78 1E    call $1E78
 21CC: C3 57 21    jp   $2157
 
@@ -4717,7 +4438,7 @@ SR.TAB:
 21D1: 32 48 43    ld   ($4348),a
 21D4: 21 46 43    ld   hl,$4346
 21D7: 34          inc  (hl)
-21D8: CD EB 22    call $22EB
+21D8: CD EB 22    call trest_22eb
 21DB: 28 09       jr   z,$21E6
 21DD: 21 AD 5F    ld   hl,$5FAD
 21E0: 11 DF 5F    ld   de,$5FDF
@@ -4731,11 +4452,11 @@ SR.TAB:
 ; See also: function S.U in Frenzy's PLAY.ASM 
 ;
 
-SCROLL_UP:
+scroll_up_21e6:
 21E6: 21 2D 44    ld   hl,$442D
 21E9: 11 00 44    ld   de,$4400              ; load HL with address of screen image RAM  
 
-S.U:
+scroll_up_21ec:
 21EC: E5          push hl
 21ED: 3E 1B       ld   a,$1B
 21EF: 21 00 01    ld   hl,$0100
@@ -4776,14 +4497,14 @@ S.U:
 2222: 32 48 43    ld   ($4348),a             ; set MAN_Y
 2225: 21 46 43    ld   hl,$4346              ; load HL with address of ROOM_Y
 2228: 35          dec  (hl)                  ; decrement Y coordinate within maze
-2229: CD EB 22    call $22EB
+2229: CD EB 22    call trest_22eb
 ; zero flag set if upright cabinet
-222C: 28 09       jr   z,$2237               ; if an upright cabinet, go to SCROLL_DOWN
+222C: 28 09       jr   z,scroll_down_2237    ; if an upright cabinet, go to SCROLL_DOWN
 
 ; cocktail cabinet
 222E: 21 2D 46    ld   hl,$462D
 2231: 11 00 46    ld   de,$4600
-2234: C3 EC 21    jp   $21EC                 ; jump to S.U to scroll up
+2234: C3 EC 21    jp   scroll_up_21ec                 ;  scroll up
 
 
 ;
@@ -4793,7 +4514,7 @@ S.U:
 ; See also: function S.D in Frenzy's PLAY.ASM 
 ;
 
-SCROLL_DOWN:
+scroll_down_2237:
 2237: 21 AD 5D    ld   hl,$5DAD
 223A: 11 FF 5D    ld   de,$5DFF
 223D: E5          push hl
@@ -4823,7 +4544,7 @@ S.D:
 225F: 32 47 43    ld   ($4347),a            ; set MAN_X
 2262: 21 45 43    ld   hl,$4345             ; load HL with address of ROOM_X
 2265: 34          inc  (hl)                 ; increment X coordinate within maze
-2266: CD EB 22    call $22EB
+2266: CD EB 22    call trest_22eb
 ; zero flag set if upright cabinet
 2269: 28 09       jr   z,scroll_left_2274              ; if upright cabinet goto SCROLL_LEFT
 
@@ -4840,7 +4561,7 @@ S.D:
 ; See also: S.L in PLAY.ASM within Frenzy's source code. 
 ;
 
-scroll_left_2274:
+scroll_2274:
 2274: 21 00 4D    ld   hl,$4D00
 2277: 11 00 44    ld   de,$4400              ; load DE with address of screen image RAM   
 
@@ -4888,7 +4609,7 @@ S.L:
 22AE: 32 47 43    ld   ($4347),a             ; set MAN_X
 22B1: 21 45 43    ld   hl,$4345              ; load HL with address of ROOM_X
 22B4: 35          dec  (hl)                  ; decrement X coordinate within maze
-22B5: CD EB 22    call $22EB
+22B5: CD EB 22    call trest_22eb
 ; zero flag set if upright cabinet
 22B8: 28 09       jr   z,$22C3               ; jump to SCROLL_RIGHT if upright cabinet
 
@@ -4904,7 +4625,7 @@ S.L:
 ; See also: function S.R in PLAY.ASM within Frenzy's source code
 ;
 
-SCROLL_RIGHT:
+scroll_right_22c3:
 22C3: 21 1F 4D    ld   hl,$4D1F
 22C6: 11 00 5E    ld   de,$5E00
 
@@ -4938,7 +4659,8 @@ S.R:
 ; Returns:
 ; Zero flag clear if screen should flip  
 
-22EB: CD E4 2B    call $2BE4                 ; call TRY_SPEAK_ON_PLAYER_LEAVING_ROOM
+trest_22eb:
+22EB: CD E4 2B    call try_speak_on_player_leaving_room_2be4
 22EE: CD 4E 36    call $364E
 22F1: FD E5       push iy
 22F3: E1          pop  hl
@@ -4967,14 +4689,14 @@ S.R:
 ; See also: SHOWS in play.asm within Frenzy's source code.
 ;
 
-SHOW_SCORE:
+show_score_2314:
 2314: AF          xor  a
 2315: 32 6D 43    ld   ($436D),a             ; clear UPDATE flag
 ; print player 1's score
 2318: 11 00 D5    ld   de,$D500
 231B: 21 3E 43    ld   hl,$433E              ; load HL with address of P1_SCORE
 231E: 06 06       ld   b,$06                 ; max number of digits in score
-2320: CD 40 2A    call $2A40                 ; call PRINT_DIGITS
+2320: CD 40 2A    call print_digits_2a40
 
 ; is this a 2 player game?
 2323: 3A 76 43    ld   a,($4376)             ; read NUMBER_OF_PLAYERS
@@ -4993,7 +4715,7 @@ SHOW_SCORE:
 ; Frenzy also has this routine; it is named "ScorePtr" in PLAY.ASM.
 ;
 
-GET_PLAYER_SCORE_PTR:
+get_player_score_ptr_2334:
 2334: 3A 44 43    ld   a,($4344)             ; read CURRENT_PLAYER
 2337: FE 02       cp   $02                   ; is player 2 playing?   
 2339: 21 41 43    ld   hl,$4341              ; load HL with address of P2_SCORE
@@ -5014,11 +4736,11 @@ GET_PLAYER_SCORE_PTR:
 ; (Note: Frenzy's docs say "ADD C * 10 ^ B TO SCORE", but I think my explanation is more easily understood)
 ;
 
-UPDATE_SCORE:
+update_score_2341:
 2341: 3E FF       ld   a,$FF
 2343: 32 6D 43    ld   ($436D),a             ; set UPDATE flag - player score needs to be redrawn ASAP.
 2346: 1E 04       ld   e,$04
-2348: CD 34 23    call $2334                 ; call GET_PLAYER_SCORE_PTR
+2348: CD 34 23    call get_player_score_ptr_2334
 234B: 23          inc  hl
 234C: 23          inc  hl
 234D: 23          inc  hl                   ; bump HL to point to memory address just after last 2 digits of players score
@@ -5053,7 +4775,7 @@ UPDATE_SCORE:
 236D: 18 F2       jr   $2361
 
 ; Now check if we get a bonus life
-236F: CD 34 23    call $2334                 ; call GET_PLAYER_SCORE_PTR
+236F: CD 34 23    call get_player_score_ptr_2334
 2372: 44          ld   b,h
 2373: 4D          ld   c,l                   ; BC = pointer to player score
 2374: 21 4F 43    ld   hl,$434F              ; load HL with address of XTRAMEN flag
@@ -5116,7 +4838,7 @@ UPDATE_SCORE:
 ; See also: ROBOT within robot.asm in Frenzy's source code.
 ;
 
-ROBOT:
+robot_23b8:
 23B8: C5          push bc
 23B9: D1          pop  de                    ; DE = BC
 23BA: 21 71 43    ld   hl,$4371              ; load HL with address of RCOUNT
@@ -5125,14 +4847,14 @@ ROBOT:
 23BF: 32 72 43    ld   ($4372),a             ; .. to RSAVED so we remember how many robots room had for room clearance bonus
 
 ; Get a VECTOR for the robot, then initialise it
-23C2: CD 0E 20    call $200E                 ; Allocate VECTOR for robot and store address in IX
+23C2: CD 0E 20    call allocate_for_robot_vector_200e                 ; Allocate VECTOR for robot and store address in IX
 23C5: DD 72 07    ld   (ix+$07),d            ; set VECTOR.P.X (X position)
 23C8: DD 73 09    ld   (ix+$09),e            ; set VECTOR.P.Y (Y position)
 23CB: AF          xor  a
-23CC: CD 36 24    call $2436                 ; call SETPAT 
+23CC: CD 36 24    call setpat_2436
 23CF: DD 36 0C 01 ld   (ix+$0c),$01          ; set VECTOR.TIME
 23D3: DD 36 00 06 ld   (ix+$00),$06          ; set VECTOR.Status to STATUS_BIT_WRITE + STATUS_BIT_MOVE
-23D7: CD 22 1E    call $1E22                 ; call CREATE_JOB
+23D7: CD 22 1E    call create_job_1e22
 
 ; 
 23DA: DD E5       push ix
@@ -5143,13 +4865,13 @@ ROBOT:
 23E6: 3E 1E       ld   a,$1E                 ; clamp A to 30 decimal minimum
 
 ; A = now delay before robots can start shooting. Activate the robot job
-23E8: CD 6D 1E    call $1E6D                 ; call ACTIVATE_HEAD_JOB
+23E8: CD 6D 1E    call activate_head_job_1e6d
 23EB: DD E1       pop  ix
 
 23ED: 0E 00       ld   c,$00
 
 ; See also: SEEK within robot.asm in Frenzy's source code.
-SEEK:
+seek_23ef:
 23EF: FD 2A 76 08 ld   iy,($0876)            ; read contents of MAN_PTR
 23F3: C5          push bc
 
@@ -5189,10 +4911,10 @@ SEEK:
 2419: 81          add  a,c                   ; and combine with vertical DURL bits in C
 241A: F5          push af                    ; save DURL bits on stack
 241B: 4F          ld   c,a                   ; load C with DURL bits as SHOOT routine needs it
-241C: CD 7F 28    call $287F                 ; call SHOOT 
+241C: CD 7F 28    call shoot_287f
 241F: F1          pop  af
 2420: C1          pop  bc
-2421: CD 36 24    call $2436                 ; call SETPAT 
+2421: CD 36 24    call setpat_2436
 2424: DD E5       push ix
 2426: C5          push bc
 2427: CD 78 1E    call $1E78
@@ -5213,13 +4935,13 @@ SEEK:
 ; Remarks:
 ; See also: SETPAT in robot.asm within Frenzy's source code.
 
-SETPAT:
+setpat_2436:
 2436: E6 0F       and  $0F
 2438: C4 6E 1C    call nz,$1C6E
 243B: B9          cp   c
 243C: C8          ret  z
 243D: 4F          ld   c,a
-243E: CD 3D 2B    call $2B3D                 ; call SET_VELOCITY. Now DE = offset into a direction table.
+243E: CD 3D 2B    call set_velocity_2b3d                 ; . Now DE = offset into a direction table.
 
 ; Set pointer to pattern table for robot on room start
 2441: 21 2D 25    ld   hl,$252D              ; load HL with address of ROBOT_ANIMATION_TABLES
@@ -5249,7 +4971,7 @@ SETPAT:
 blam_2457:
 2457: E5          push hl
 2458: DD E5       push ix
-245A: CD 8A 34    call $348A                 ; play sound of robot exploding
+245A: CD 8A 34    call sblam_348a                 ; play sound of robot exploding
 245D: E1          pop  hl                    ; HL = IX
 245E: 11 06 00    ld   de,$0006
 2461: 19          add  hl,de                 ; now HL points to VECTOR.V.X (X velocity)
@@ -5277,7 +4999,7 @@ blam_2457:
 247C: 36 01       ld   (hl),$01              ; set VECTOR.TPRIME
 247E: DD E5       push ix
 2480: 01 05 01    ld   bc,$0105              ; 50 PTS
-2483: CD 41 23    call $2341                 ; call UPDATE_SCORE 
+2483: CD 41 23    call update_score_2341
 2486: 21 4E 43    ld   hl,$434E              ; load HL with address of OTTO_TIME
 2489: 34          inc  (hl)                  ; delay otto's appearance slightly! 
 248A: 34          inc  (hl)
@@ -5290,13 +5012,13 @@ blam_2457:
 2491: 3A 72 43    ld   a,($4372)             ; read RSAVED
 2494: F5          push af                    ; see SCLOP in Frenzy's source code.
 2495: 01 01 01    ld   bc,$0101              ; 10 PTS
-2498: CD 41 23    call $2341                 ; call UPDATE_SCORE
+2498: CD 41 23    call update_score_2341
 249B: F1          pop  af
 249C: 3D          dec  a                     ; reduce counter of robots
 249D: 20 F5       jr   nz,$2494              ; repeat until 10PTs awarded for each robot.
 
 ; And now display message on screen stating the bonus for clearing the room
-249F: CD 7B 29    call $297B                 ; call PRINT_STRING
+249F: CD 7B 29    call print_string_297b
 24A2: 
     00
     60 D5          
@@ -5324,7 +5046,7 @@ blam_2457:
 
 24C3: 21 00 43    ld   hl,$4300
 24C6: 06 04       ld   b,$04
-24C8: CD 4A 2A    call $2A4A                 ; call SHOWO
+24C8: CD 4A 2A    call showo_2a4a
 24CB: 3E 1E       ld   a,$1E
 24CD: CD 6D 1E    call $1E6D
 24D0: DD E1       pop  ix
@@ -5408,7 +5130,7 @@ M.TAB:
 ; See also: P.TAB within robot.asm in Frenzy's source code.
 ;
 
-ROBOT_ANIMATION_TABLES:
+robot_animation_tables_252d:
 252D:  
     00 10        ; Pointer to robot Standing still pattern table  
     13 10        ; Pointer to Robot moving up & right pattern table      
@@ -5467,7 +5189,7 @@ ROBOT_ANIMATION_TABLES:
 25A2: 20 02       jr   nz,$25A6              ; not player 2 in control, goto $25A6
 25A4: 2E E8       ld   l,$E8                 ; L = X coordinate for player 2 lives
 25A6: 06 00       ld   b,$00                 ; magic image RAM control bits
-25A8: CD A3 29    call $29A3                 ; call CALCULATE_MAGIC_IMAGE_RAM_ADDRESS
+25A8: CD A3 29    call calculate_magic_image_ram_address_29a3
 25AB: EB          ex   de,hl                 ; now DE = magic image RAM address
 25AC: 08          ex   af,af'
 25AD: 3A 49 43    ld   a,($4349)             ; read DEATHS
@@ -5478,15 +5200,15 @@ ROBOT_ANIMATION_TABLES:
 ; Display B number of player life icons starting from magic image RAM address DE
 25B5: C5          push bc
 25B6: 0E 80       ld   c,$80                 ; ordinal for "life" character (looks like a stick man.)
-25B8: CD DB 29    call $29DB                 ; call PRINT_CHAR
+25B8: CD DB 29    call print_char_29db
 25BB: 13          inc  de                    ; bump DE to point to next image ram address 
 25BC: C1          pop  bc
 25BD: 10 F6       djnz $25B5                 ; repeat until all lives drawn. 
 ; are we in demo mode? If so, print the number of credits inserted too
 25BF: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 25C2: B7          or   a                     ; test if in DEMO mode
-25C3: C4 CD 18    call nz,$18CD              ; we're in demo mode, so call PRINT_CREDITS
-25C6: CD 14 23    call $2314                 ; call SHOW_SCORE
+25C3: C4 CD 18    call nz,print_credits_18cd              ; we're in demo mode, so
+25C6: CD 14 23    call show_score_2314
 25C9: C9          ret
 
 25CA: CD 62 26    call $2662
@@ -5502,12 +5224,12 @@ ROBOT_ANIMATION_TABLES:
 25DE: CD 4C 26    call $264C
 25E1: C3 4C 26    jp   $264C
 25E4: 06 10       ld   b,$10
-25E6: CD A3 29    call $29A3                 ; call CALCULATE_MAGIC_IMAGE_RAM_ADDRESS
+25E6: CD A3 29    call calculate_magic_image_ram_address_29a3
 25E9: EB          ex   de,hl
 25EA: C9          ret
-25EB: CD 78 26    call $2678                 ; call RANDOM
+25EB: CD 78 26    call random_2678
 25EE: E5          push hl
-25EF: CD 78 26    call $2678                 ; call RANDOM
+25EF: CD 78 26    call random_2678
 25F2: 01 06 26    ld   bc,$2606
 25F5: C5          push bc
 25F6: E6 03       and  $03
@@ -5554,7 +5276,7 @@ ROBOT_ANIMATION_TABLES:
 264F: E5          push hl
 2650: CD E4 25    call $25E4
 2653: 21 9B 26    ld   hl,$269B
-2656: CD 17 28    call $2817                 ; call DRAW_SPRITE
+2656: CD 17 28    call draw_sprite_2817
 2659: E1          pop  hl
 265A: C1          pop  bc
 265B: 3E 04       ld   a,$04
@@ -5567,7 +5289,7 @@ ROBOT_ANIMATION_TABLES:
 2665: E5          push hl
 2666: CD E4 25    call $25E4
 2669: 21 9B 26    ld   hl,$269B
-266C: CD 17 28    call $2817                 ; call DRAW_SPRITE
+266C: CD 17 28    call draw_sprite_2817
 266F: E1          pop  hl
 2670: C1          pop  bc
 2671: 3E 04       ld   a,$04
@@ -5584,7 +5306,7 @@ ROBOT_ANIMATION_TABLES:
 ; 
 ; See alsoL: RANDOM contained within demo.asm in Frenzy's source code.
 
-RANDOM:
+random_2678:
 2678: E5          push hl
 2679: 2A 5C 43    ld   hl,($435C)            ; load HL with RNG_SEED         
 267C: 54          ld   d,h
@@ -5675,7 +5397,7 @@ RANDOM:
 ; See also: BS in init.asm within Frenzy's source code.
 ;
 
-BOTTOM_OF_SCREEN_INTERRUPT:
+bottom_of_screen_interrupt_26d9:
 26D9: FD E5       push iy
 26DB: DD E5       push ix
 26DD: E5          push hl
@@ -5688,20 +5410,20 @@ BOTTOM_OF_SCREEN_INTERRUPT:
 
 ; Erase the player's sprite from the screen
 26E6: 2A 76 08    ld   hl,($0876)            ; load HL with contents of MAN_PTR 
-26E9: CD 2D 27    call $272D                 ; call ERASE_PATTERN
-26EC: CD 19 37    call $3719                 ; call UNCOLOUR_MAN
+26E9: CD 2D 27    call erase_pattern_272d
+26EC: CD 19 37    call uncolour_man_3719
 26EF: E1          pop  hl
 26F0: E5          push hl
-26F1: CD 2D 27    call $272D                 ; call ERASE_PATTERN
-26F4: CD F3 14    call $14F3                 ; call HANDLE_PLAYER_BOLTS
+26F1: CD 2D 27    call erase_pattern_272d
+26F4: CD F3 14    call handle_player_bolts_14f3
 
 ; Update players position on screen 
 26F7: 2A 76 08    ld   hl,($0876)            ; load HL with contents of MAN_PTR
-26FA: CD A9 27    call $27A9                 ; call MOVE_ANIMATE_VECTOR
+26FA: CD A9 27    call move_animate_vector_27a9
 
 ;
 26FD: E1          pop  hl
-26FE: CD A9 27    call $27A9                 ; call MOVE_ANIMATE_VECTOR
+26FE: CD A9 27    call move_animate_vector_27a9
 
 2701: 2A 70 08    ld   hl,($0870)            ; read V.PTR
 2704: 7C          ld   a,h
@@ -5739,7 +5461,7 @@ BOTTOM_OF_SCREEN_INTERRUPT:
 ; Remarks:
 ; See also: SECT1 in Frenzy's INIT.ASM source.
 
-ERASE_PATTERN:
+erase_pattern_272d:
 272D: 22 70 08    ld   ($0870),hl
 2730: E5          push hl
 2731: FD E1       pop  iy                    ; IY = HL
@@ -5760,7 +5482,7 @@ ERASE_PATTERN:
 2746: 6F          ld   l,a                  
 ; HL now = pointer to sprite width, height, pattern data
 ; DE = pointer to magic image RAM
-2747: CD 17 28    call $2817                 ; call DRAW_SPRITE
+2747: CD 17 28    call draw_sprite_2817
 
 ; Restore pointer to VECTOR structure we preserved @ $272D
 274A: 2A 70 08    ld   hl,($0870)
@@ -5771,7 +5493,7 @@ ERASE_PATTERN:
 ; Remarks:
 ; See also: SECT2 in Frenzy's INIT.ASM source.
 
-write_pattern_274d:
+write_274d:
 274D: CB 4E       bit  1,(hl)                ; test WRITE bit in VECTOR.Status
 274F: C8          ret  z
 2750: CB 8E       res  1,(hl)                ; clear WRITE bit
@@ -5784,7 +5506,7 @@ write_pattern_274d:
 275A: 23          inc  hl
 275B: 06 90       ld   b,$90                 ; XOR write magic control byte
 275D: EB          ex   de,hl                 ; Now H = VECTOR.Y, L = VECTOR.X
-275E: CD A3 29    call $29A3                 ; call CALCULATE_MAGIC_IMAGE_RAM_ADDRESS
+275E: CD A3 29    call calculate_magic_image_ram_address_29a3
 
 ; now A = magic RAM control byte, and HL = magic RAM address
 2761: FD 77 01    ld   (iy+$01),a            ; write to VECTOR.Magic
@@ -5827,7 +5549,7 @@ write_pattern_274d:
 278E: FD 74 05    ld   (iy+$05),h            ; set VECTOR.O.P.H
 2791: FD 73 02    ld   (iy+$02),e            ; set VECTOR.O.A.L 
 2794: FD 72 03    ld   (iy+$03),d            ; set VECTOR.O.A.H
-2797: CD 17 28    call $2817                 ; call DRAW_SPRITE
+2797: CD 17 28    call draw_sprite_2817
 279A: 2A 70 08    ld   hl,($0870)            ; get pointer to next VECTOR to process from V.PTR
 279D: DB 4E       in   a,($4E)               ; read middle/bottom screen status
 279F: CB 7F       bit  7,a
@@ -5845,7 +5567,7 @@ write_pattern_274d:
 ;
 ; See also: SECT3 in init.asm within Frenzy's source code.
 
-MOVE_ANIMATE_VECTOR:
+move_animate_vector_27a9:
 27A9: 22 70 08    ld   ($0870),hl            ; set V.PTR to point to next VECTOR structure
 27AC: CB 56       bit  2,(hl)                ; test if MOVE bit is set in VECTOR.Status 
 27AE: C8          ret  z                     ; exit if bit not set
@@ -5964,7 +5686,7 @@ MOVE_ANIMATE_VECTOR:
 ;
 ; See also: PLOT in init.asm within Frenzy's source code.
 
-DRAW_SPRITE:
+draw_sprite_2817:
 2817: 06 00       ld   b,$00
 2819: 7E          ld   a,(hl)                ; read width of sprite
 281A: 23          inc  hl                    ; bump HL to point to height 
@@ -6028,7 +5750,7 @@ DRAW_SPRITE:
 ;
 ; See also: X1PLOT in init.asm within Frenzy's source code 
 
-DRAW_SPRITE_1_BYTE_WIDE:
+draw_sprite_1_byte_wide_2853:
 2853: 3A 79 43    ld   a,($4379)             ; read FLIP				 
 2856: B7          or   a                     ; if upright cabinet, zero flag will be set
 2857: 7E          ld   a,(hl)                ; read height
@@ -6083,7 +5805,7 @@ DRAW_SPRITE_1_BYTE_WIDE:
 ; SHOOT in shoot.asm within Frenzy's source code.
 ;
 
-SHOOT:
+shoot_287f:
 287F: 2A 72 08    ld   hl,($0872)            ; Load HL with contents of LINKED_LIST_PTR
 2882: 23          inc  hl
 2883: 7E          ld   a,(hl)
@@ -6187,7 +5909,7 @@ SHOOT:
 ; C = DURL bits for robot's bolt
 28DE: 06 00       ld   b,$00                 ; zero B so that BC = index into D.TAB table
 28E0: E5          push hl
-28E1: CD E7 34    call $34E7                 ; call SRFIRE to make robot shoot noise
+28E1: CD E7 34    call srfire_34e7                 ;  to make robot shoot noise
 28E4: 21 42 20    ld   hl,$2042              ; load HL with address of D.TAB table
 28E7: 09          add  hl,bc                 ; now HL = pointer to offset in D.TAB table
 28E8: 4E          ld   c,(hl)                ; now BC = offset read from D.TAB table                
@@ -6250,7 +5972,7 @@ SHOOT:
 2927: FB          ei
 2928: DD E5       push ix
 292A: 3E 0A       ld   a,$0A                 ; delay
-292C: CD 6D 1E    call $1E6D                 ; call ACTIVATE_HEAD_JOB
+292C: CD 6D 1E    call activate_head_job_1e6d
 292F: DD E1       pop  ix
 2931: 2A 72 08    ld   hl,($0872)            ; get head of list by reading contents of LINKED_LIST_PTR
 2934: 23          inc  hl
@@ -6374,7 +6096,7 @@ S.TAB:
 ;
 ; When the print routine reads a zero byte, it will then jump to the instruction following the byte.
 
-PRINT_STRING:
+print_string_297b:
 297B: E1          pop  hl                    ; get return address from stack into HL
 297C: 46          ld   b,(hl)                ; load B with magic RAM control bits
 297D: 23          inc  hl
@@ -6383,11 +6105,11 @@ PRINT_STRING:
 2980: 56          ld   d,(hl)                ; load D with Y coordinate
 2981: 23          inc  hl
 2982: EB          ex   de,hl                 ; now H = Y coordinate, L = X coordinate
-2983: CD A3 29    call $29A3                 ; call CALCULATE_MAGIC_IMAGE_RAM_ADDRESS                 
+2983: CD A3 29    call calculate_magic_image_ram_address_29a3
 2986: EB          ex   de,hl                 ; now HL = pointer to character to print, DE = magic RAM address
 2987: 4E          ld   c,(hl)                ; read character to print
 2988: CB B9       res  7,c                   
-298A: CD DB 29    call $29DB                 ; call PRINT_CHAR
+298A: CD DB 29    call print_char_29db
 298D: 47          ld   b,a
 298E: 3A 79 43    ld   a,($4379)             ; read FLIP	
 2991: B7          or   a
@@ -6421,7 +6143,7 @@ PRINT_STRING:
 ; Remarks:
 ; See also: RtoAx (Relative To Absolute) in showa.asm within Frenzy's source code
 
-RTOAX:
+rtoax_29a1:
 29A1: 06 90       ld   b,$90                ; Magic image RAM control bits - XOR write
 
 ; Expects:
@@ -6437,7 +6159,7 @@ RTOAX:
 ;
 ; See also: RtoA (Relative To Absolute) in showa.asm within Frenzy's source code
 
-CALCULATE_MAGIC_IMAGE_RAM_ADDRESS:
+calculate_magic_image_ram_address_29a3:
 29A3: 3A 79 43    ld   a,($4379)             ; read FLIP	
 29A6: B7          or   a                     ; set zero flag if playing on upright cabinet  
 29A7: 3E 07       ld   a,$07                 ; magic RAM control byte 
@@ -6487,7 +6209,7 @@ CALCULATE_MAGIC_IMAGE_RAM_ADDRESS:
 ;
 ; See also: SHOWC in showa.asm within Frenzy's source code.
 
-PRINT_CHAR:
+print_char_29db:
 29DB: E5          push hl
 29DC: 21 00 00    ld   hl,$0000
 29DF: 06 00       ld   b,$00
@@ -6577,18 +6299,18 @@ PRINT_CHAR:
 ;
 ; See also: SHOWN (Show Number) in showa.asm within Frenzy's source code
 
-PRINT_DIGITS:
+print_digits_2a40:
 2A40: C5          push bc
 2A41: 06 00       ld   b,$00                 ; magic image RAM control bits
 2A43: EB          ex   de,hl                 ; now HL = Y/X coordinates
-2A44: CD A3 29    call $29A3                 ; call CALCULATE_MAGIC_IMAGE_RAM_ADDRESS
+2A44: CD A3 29    call calculate_magic_image_ram_address_29a3
 2A47: EB          ex   de,hl                 ; now DE = magic image RAM address
 2A48: 08          ex   af,af'                ; Save magic register byte
 2A49: C1          pop  bc
 
 ; bit 0 of C determines if numbers will be padded out to B digits length with leading spaces if required.
 ; if bit 0 is set, then padding is disabled (see $2A65) 
-SHOWO:
+showo_2a4a:
 2A4A: CB 81       res  0,c                   ; clear bit 0 of c, number will be padded with leading spaces 
 
 2A4C: 78          ld   a,b                   ; load A with number of digits to print
@@ -6635,7 +6357,7 @@ SHOWO:
 2A78: C5          push bc
 2A79: 4F          ld   c,a                   ; load C with ordinal of character to print
 2A7A: 08          ex   af,af'                ; Restore magic register byte
-2A7B: CD DB 29    call $29DB                 ; call PRINT_CHAR
+2A7B: CD DB 29    call print_char_29db
 2A7E: 08          ex   af,af'
 2A7F: C1          pop  bc
 2A80: E1          pop  hl
@@ -6667,7 +6389,7 @@ SHOWO:
 2A8E: C5          push bc
 2A8F: D1          pop  de
 2A90: CD 0E 20    call $200E
-2A93: CD 22 1E    call $1E22                 ; call CREATE_JOB
+2A93: CD 22 1E    call create_job_1e22
 2A96: DD E5       push ix
 2A98: CD 59 1E    call $1E59
 2A9B: DD E1       pop  ix
@@ -6709,7 +6431,7 @@ SHOWO:
 2AD9: 20 F1       jr   nz,$2ACC
 
 ; time for otto to appear!!!
-2ADB: CD DE 2B    call $2BDE                 ; say "INTRUDER ALERT! INTRUDER ALERT!"
+2ADB: CD DE 2B    call say_intruder_alert_intruder_alert_2bde                 ; say "INTRUDER ALERT! INTRUDER ALERT!"
 2ADE: 21 0B 12    ld   hl,$120B              ; address of Otto's sprite data   
 2AE1: DD 75 0A    ld   (ix+$0a),l            
 2AE4: DD 74 0B    ld   (ix+$0b),h
@@ -6768,7 +6490,7 @@ SHOWO:
 ; Remarks:
 ; See also: SETVXY in super.asm within Frenzy's source code
 
-SET_VELOCITY:
+set_velocity_2b3d:
 2B3D: 4F          ld   c,a
 2B3E: 06 00       ld   b,$00                 ; Extend A into BC (meaning, BC = A)
 2B40: 50          ld   d,b                   
@@ -6829,9 +6551,9 @@ SET_VELOCITY:
 ;   if bit 7 of byte read was not set, continue loop.
 ;   else, this is the last speech byte in the word sequence, so exit routine.
 
-WRITE_RANDOM_SENTENCE_TO_BUFFER:
+write_random_sentence_to_buffer_2b6b:
 2B6B: D5          push de
-2B6C: CD 78 26    call $2678                 ; call RANDOM
+2B6C: CD 78 26    call random_2678
 2B6F: D1          pop  de
 ; A now  = random number.
 ; Looks like this is just shaking A up a bit more - adding a wee bit more "randomness" perhaps?. I can't discern any other logic.
@@ -6890,7 +6612,7 @@ WRITE_RANDOM_SENTENCE_TO_BUFFER:
 ; Nevertheless, I enjoyed working out the logic here - very satisfying to crack it by oneself.
 ;
 
-GENERATE_ROBOT_SPEECH:
+generate_robot_speech_2b97:
 2B97: 2A 98 08    ld   hl,($0898)            ; read VOICE_PC
 2B9A: 7C          ld   a,h
 2B9B: B5          or   l                     ; if H is 0 and L is 0 then A will be 0. HL is thus NULL and zero flag will be set.
@@ -6902,7 +6624,7 @@ GENERATE_ROBOT_SPEECH:
 2BA1: C0          ret  nz                    ; if counter hasn't hit zero, it's not time for the robots to talk, exit
 
 ; Set countdown before robots next speak 
-2BA2: CD 78 26    call $2678                 ; call RANDOM
+2BA2: CD 78 26    call random_2678
 2BA5: 07          rlca
 2BA6: 07          rlca
 2BA7: E6 0C       and  $0C                   
@@ -6924,7 +6646,7 @@ GENERATE_ROBOT_SPEECH:
 ;
 
 ; first byte in buffer is pitch for voice. Generate this at random
-2BAF: CD 78 26    call $2678                 ; call RANDOM
+2BAF: CD 78 26    call random_2678
 2BB2: E6 1F       and  $1F                   ; ensure number is between 0..31 decimal
 2BB4: F6 60       or   $60
 2BB6: 77          ld   (hl),a                ; first byte = set pitch/ speed
@@ -6934,7 +6656,7 @@ GENERATE_ROBOT_SPEECH:
 ; Get a random byte from ROBOT_FIRST_WORD_SPEECH_TABLE speech table and insert it into SPEECH_BUFFER.  
 2BB9: 21 2C 2C    ld   hl,$2C2C              ; load HL with address of ROBOT_FIRST_WORD_SPEECH_TABLE
 2BBC: 06 06       ld   b,$06                 ; there are 6 words available to choose from in the table
-2BBE: CD 6B 2B    call $2B6B                 ; call WRITE_RANDOM_SENTENCE_TO_BUFFER - just writes a single spoken word.
+2BBE: CD 6B 2B    call write_random_sentence_to_buffer_2b6b                 ;  - just writes a single spoken word.
 
 ; Write the bytes representing the word(s) comprising the target of the sentence (the player!) to SPEECH_BUFFER. 
 2BC1: 21 25 2C    ld   hl,$2C25              ; load HL with address of ROBOT_TARGET_SPEECH_TABLE speech table
@@ -6951,7 +6673,7 @@ GENERATE_ROBOT_SPEECH:
 2BCE: 05          dec  b                     ; decrement B to 3, which means "only 3 word sequences left to choose from"
 
 ; Code executes whether chicken or not ;) 
-2BCF: CD 6B 2B    call $2B6B                 ; call WRITE_RANDOM_SENTENCE_TO_BUFFER
+2BCF: CD 6B 2B    call write_random_sentence_to_buffer_2b6b
 
 2BD2: EB          ex   de,hl
 2BD3: 36 47       ld   (hl),$47              ; write "end of sentence" byte required by speech synthesiser
@@ -6961,7 +6683,7 @@ GENERATE_ROBOT_SPEECH:
 2BDB: C3 1B 2C    jp   $2C1B                 ; jump to TALK
 
 
-SAY_INTRUDER_ALERT_INTRUDER_ALERT:
+say_intruder_alert_intruder_alert_2bde:
 2BDE: 21 4A 2C    ld   hl,$2C4A              ; load HL with address of INTRUDER_ALERT_INTRUDER_ALERT speech data
 2BE1: C3 1B 2C    jp   $2C1B                 ; jump to TALK
 
@@ -6973,16 +6695,16 @@ SAY_INTRUDER_ALERT_INTRUDER_ALERT:
 ;
 ; Has the player killed all of the robots?
 
-TRY_SPEAK_ON_PLAYER_LEAVING_ROOM:
+try_speak_on_player_leaving_room_2be4:
 2BE4: 3A 71 43    ld   a,($4371)             ; read RCOUNT
 2BE7: B7          or   a                     ; test if zero.
 2BE8: 20 29       jr   nz,say_chicken_fight_like_a_robot_2C13              ; if there's still some robots left in the maze, player's a chicken. Goto SAY_CHICKEN_FIGHT_LIKE_A_ROBOT
 ; Player's not a chicken. 
 ; Say "THE HUMANOID MUST NOT ESCAPE" or "THE INTRUDER MUST NOT ESCAPE"
 ; First, select pitch of robot voice.
-say_chicken_fight_like_a_robot:
+say_chicken_fight_like_a_robot_2bea:
 2BEA: 21 18 09    ld   hl,$0918              ; load HL with address of SPEECH_BUFFER
-2BED: CD 78 26    call $2678                 ; call RANDOM
+2BED: CD 78 26    call random_2678
 2BF0: E6 07       and  $07                   ; clamp number to 0..7
 2BF2: F6 70       or   $70
 2BF4: 77          ld   (hl),a                ; first byte = set pitch/ speed   
@@ -6992,12 +6714,12 @@ say_chicken_fight_like_a_robot:
 ; Add bytes representing "THE HUMANOID" or "THE INTRUDER" and insert them into SPEECH_BUFFER.  
 2BF7: 21 28 2C    ld   hl,$2C28              ; point to the second word sequence, "THE HUMANOID", within ROBOT_TARGET_SPEECH_TABLE
 2BFA: 06 02       ld   b,$02                 ; 2 remaining word sequences to choose from in the list
-2BFC: CD 6B 2B    call $2B6B                 ; call WRITE_RANDOM_SENTENCE_TO_BUFFER
+2BFC: CD 6B 2B    call write_random_sentence_to_buffer_2b6b
 
 ; Append MUST NOT ESCAPE
 2BFF: 21 32 2C    ld   hl,$2C32              ; load HL with address of MUST_NOT_ESCAPE_SPEECH_TABLE
 2C02: 06 01       ld   b,$01                 ; MUST NOT ESCAPE is the sole word sequence available, so just 1 to choose from.
-2C04: CD 6B 2B    call $2B6B                 ; call WRITE_RANDOM_SENTENCE_TO_BUFFER
+2C04: CD 6B 2B    call write_random_sentence_to_buffer_2b6b
 2C07: EB          ex   de,hl
 2C08: 36 44       ld   (hl),$44              ; write "end of sentence" byte required by speech synthesiser
 2C0A: 23          inc  hl
@@ -7011,7 +6733,7 @@ say_chicken_fight_like_a_robot:
 ;  The player's exited the room. Taunt them with "Chicken, fight like a robot" (!)
 ;
 ;
-say_chicken_fight_like_a_robot_2C13:
+say_2c13:
 2C13: 21 35 2C    ld   hl,$2C35              ; load HL with address of CHICKEN_FIGHT_LIKE_A_ROBOT_SPEECH_BYTES speech data
 2C16: 3E FF       ld   a,$FF                 ; This will make the player a chicken in the robot's eyes!
 
@@ -7019,12 +6741,12 @@ say_chicken_fight_like_a_robot_2C13:
 
 ; Set VOICE_PC - the NMI handler 
 ; HL = pointer to speech data
-TALK:
+talk_2c1b:
 2C1B: 22 98 08    ld   ($0898),hl            ; update VOICE_PC
 2C1E: C9          ret
 
 
-SAY_GOT_THE_HUMANOID_GOT_THE_INTRUDER:
+say_got_the_humanoid_got_the_intruder_2c1f:
 2C1F: 21 40 2C    ld   hl,$2C40              ; load HL with address of GOT_THE_HUMANOID_GOT_THE_INTRUDER_SPEECH_BYTES speech data
 2C22: AF          xor  a                     ; clear the IS_CHICKEN flag
 2C23: 18 F3       jr   $2C18                 
@@ -7047,7 +6769,7 @@ SAY_GOT_THE_HUMANOID_GOT_THE_INTRUDER:
 ;
 ; See also:
 ; docs @ $2BAC for more info.
-ROBOT_TARGET_SPEECH_TABLE:
+robot_target_speech_table_2c25:
 2C25: 
     0A      ; THE              
     98      ; CHICKEN  
@@ -7065,7 +6787,7 @@ ROBOT_TARGET_SPEECH_TABLE:
 ; $2BB9 within GENERATE_ROBOT_SPEECH
 ; 
 
-ROBOT_FIRST_WORD_SPEECH_TABLE:
+robot_first_word_speech_table_2c2c:
 2C2C: 
     86      ; GET          
     83      ; CHARGE    
@@ -7077,7 +6799,7 @@ ROBOT_FIRST_WORD_SPEECH_TABLE:
 ;
 ; Used to generate the sentence "<pick a sentence from ROBOT_TARGET_SPEECH_TABLE above> MUST NOT ESCAPE"
 ; Note how bit 7 of ESCAPE (the last word) is set.
-MUST_NOT_ESCAPE_SPEECH_TABLE:
+must_not_escape_speech_table_2c32:
 2C32: 
     16      ; MUST   
     17      ; NOT 
@@ -7085,7 +6807,7 @@ MUST_NOT_ESCAPE_SPEECH_TABLE:
 
 
 
-CHICKEN_FIGHT_LIKE_A_ROBOT_SPEECH_BYTES:
+chicken_fight_like_a_robot_speech_bytes_2c35:
 2C35: 
     73          ; Pitch of speech
     18          ; CHICKEN 
@@ -7099,7 +6821,7 @@ CHICKEN_FIGHT_LIKE_A_ROBOT_SPEECH_BYTES:
     47          
     FF          ; Terminator byte
 
-GOT_THE_HUMANOID_GOT_THE_INTRUDER_SPEECH_BYTES:
+got_the_humanoid_got_the_intruder_speech_bytes_2c40:
 2C40: 
     7B          ; Pitch of speech
     04          ; GOT         
@@ -7112,7 +6834,7 @@ GOT_THE_HUMANOID_GOT_THE_INTRUDER_SPEECH_BYTES:
     47          
     FF          ; Terminator byte
 
-INTRUDER_ALERT_INTRUDER_ALERT:
+intruder_alert_intruder_alert_2c4a:
 2C4A: 
     7B          ; Pitch of speech   
     12          ; INTRUDER                        
@@ -7125,7 +6847,7 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 
 
 
-2C51: CD 34 23    call $2334                 ; call GET_PLAYER_SCORE_PTR
+2C51: CD 34 23    call get_player_score_ptr_2334
 2C54: E5          push hl
 2C55: 23          inc  hl
 2C56: 23          inc  hl
@@ -7136,14 +6858,14 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 2C5F: 1A          ld   a,(de)
 2C60: E6 0F       and  $0F
 2C62: 28 06       jr   z,$2C6A
-2C64: CD B3 2D    call $2DB3                 ; call INCREMENT_BY_1
+2C64: CD B3 2D    call increment_by_1_2db3
 2C67: 3D          dec  a
 2C68: 20 FA       jr   nz,$2C64
 2C6A: 05          dec  b
 2C6B: 1A          ld   a,(de)
 2C6C: E6 F0       and  $F0
 2C6E: 28 07       jr   z,$2C77
-2C70: CD B3 2D    call $2DB3                 ; call INCREMENT_BY_1
+2C70: CD B3 2D    call increment_by_1_2db3
 2C73: D6 10       sub  $10
 2C75: 20 F9       jr   nz,$2C70
 2C77: 05          dec  b
@@ -7201,9 +6923,9 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 2CBE: 10 FA       djnz $2CBA
 2CC0: EB          ex   de,hl
 2CC1: E5          push hl
-2CC2: CD 4E 1A    call $1A4E                 ; call CLEAR_SCREEN
+2CC2: CD 4E 1A    call clear_screen_1a4e
 2CC5: CD 1C 36    call $361C
-2CC8: CD ED 1A    call $1AED                 ; call LTABLE
+2CC8: CD ED 1A    call ltable_1aed
 2CCB: 1B          dec  de
 2CCC: 00          nop
 2CCD: D8          ret  c
@@ -7214,7 +6936,7 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 2CD4: 06 01       ld   b,$01
 2CD6: 21 44 43    ld   hl,$4344
 2CD9: CD 4A 2A    call $2A4A
-2CDC: CD ED 1A    call $1AED                 ; call LTABLE
+2CDC: CD ED 1A    call ltable_1aed
 2CDF: 93          sub  e
 2CE0: 07          rlca
 2CE1: 71          ld   (hl),c
@@ -7230,7 +6952,7 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 2CEE: 5F          ld   e,a
 2CEF: 5F          ld   e,a
 2CF0: 00          nop
-2CF1: CD ED 1A    call $1AED                 ; call LTABLE
+2CF1: CD ED 1A    call ltable_1aed
 2CF4: 1B          dec  de
 2CF5: 2F          cpl
 2CF6: 1B          dec  de
@@ -7241,7 +6963,7 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 2CFB: 2F          cpl
 2CFC: 06 00       ld   b,$00
 2CFE: 21 78 60    ld   hl,$6078
-2D01: CD A3 29    call $29A3                 ; call CALCULATE_MAGIC_IMAGE_RAM_ADDRESS
+2D01: CD A3 29    call calculate_magic_image_ram_address_29a3
 2D04: EB          ex   de,hl
 2D05: E1          pop  hl
 2D06: E5          push hl
@@ -7256,7 +6978,7 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 2D16: 0E 41       ld   c,$41
 2D18: C5          push bc
 2D19: 3A 79 43    ld   a,($4379)             ; read FLIP	
-2D1C: CD DB 29    call $29DB                 ; call PRINT_CHAR
+2D1C: CD DB 29    call print_char_29db
 2D1F: D5          push de
 2D20: E5          push hl
 2D21: 3E 0F       ld   a,$0F
@@ -7292,7 +7014,7 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 2D5B: 3A 79 43    ld   a,($4379)             ; read FLIP	
 2D5E: F6 90       or   $90
 2D60: 0E 5F       ld   c,$5F
-2D62: CD DB 29    call $29DB                 ; call PRINT_CHAR
+2D62: CD DB 29    call print_char_29db
 2D65: D1          pop  de
 2D66: C1          pop  bc
 2D67: 23          inc  hl
@@ -7364,7 +7086,7 @@ INTRUDER_ALERT_INTRUDER_ALERT:
 ;
 ; See also: ItemInc in books.asm within Frenzy's source code
 
-INCREMENT_BY_1:
+increment_by_1_2db3:
 2DB3: F5          push af
 2DB4: C5          push bc
 2DB5: D5          push de
@@ -7395,7 +7117,7 @@ INCREMENT_BY_1:
 2DD5: DB 4A       in   a,($4A)               ; read player 2 controls
 2DD7: C9          ret
 
-2DD8: CD 7B 29    call $297B                 ; call PRINT_STRING
+2DD8: CD 7B 29    call print_string_297b
 2DDB: 
     90          
     20 08         ; X/Y coordinates
@@ -7440,122 +7162,7 @@ INCREMENT_BY_1:
 301E:  7B 29 90 04 B0 70 61 72 61 20 72 65 74 65 6E 65  {)...para retene
 302E:  72 6C 61 73 2E 00 C9 00 3E 41 5D 51 5D 41 3E 00  rlas....>A]Q]A>.
 
-303E: 00          nop
-303F: 00          nop
-3040: 00          nop
-3041: 00          nop
-3042: 00          nop
-3043: 00          nop
-3044: 00          nop
-3045: 00          nop
-3046: 00          nop
-3047: 10 10       djnz $3059
-3049: 10 10       djnz $305B
-304B: 10 10       djnz $305D
-304D: 10 00       djnz $304F
-304F: 10 14       djnz $3065
-3051: 14          inc  d
-3052: 14          inc  d
-3053: 00          nop
-3054: 00          nop
-3055: 00          nop
-3056: 00          nop
-3057: 00          nop
-3058: 00          nop
-3059: 14          inc  d
-305A: 14          inc  d
-305B: 14          inc  d
-305C: 7F          ld   a,a
-305D: 14          inc  d
-305E: 7F          ld   a,a
-305F: 14          inc  d
-3060: 14          inc  d
-3061: 14          inc  d
-3062: 14          inc  d
-3063: 7F          ld   a,a
-3064: 54          ld   d,h
-3065: 54          ld   d,h
-3066: 7F          ld   a,a
-3067: 15          dec  d
-3068: 15          dec  d
-3069: 7F          ld   a,a
-306A: 14          inc  d
-306B: 20 51       jr   nz,$30BE
-306D: 22 04 08    ld   ($0804),hl
-3070: 10 22       djnz $3094
-3072: 45          ld   b,l
-3073: 02          ld   (bc),a
-3074: 00          nop
-3075: 18 24       jr   $309B
-3077: 28 10       jr   z,$3089
-3079: 29          add  hl,hl
-307A: 46          ld   b,(hl)
-307B: 46          ld   b,(hl)
-307C: 39          add  hl,sp
-307D: 08          ex   af,af'
-307E: 08          ex   af,af'
-307F: 08          ex   af,af'
-3080: 00          nop
-3081: 00          nop
-3082: 00          nop
-3083: 00          nop
-3084: 00          nop
-3085: 00          nop
-3086: 04          inc  b
-3087: 08          ex   af,af'
-3088: 10 10       djnz $309A
-308A: 10 10       djnz $309C
-308C: 10 08       djnz $3096
-308E: 04          inc  b
-308F: 10 08       djnz $3099
-3091: 04          inc  b
-3092: 04          inc  b
-3093: 04          inc  b
-3094: 04          inc  b
-3095: 04          inc  b
-3096: 08          ex   af,af'
-3097: 10 00       djnz $3099
-3099: 00          nop
-309A: 08          ex   af,af'
-309B: 2A 1C 1C    ld   hl,($1C1C)
-309E: 2A 08 00    ld   hl,($0008)
-30A1: 00          nop
-30A2: 00          nop
-30A3: 08          ex   af,af'
-30A4: 08          ex   af,af'
-30A5: 3E 08       ld   a,$08
-30A7: 08          ex   af,af'
-30A8: 00          nop
-30A9: 00          nop
-30AA: 80          add  a,b
-30AB: 00          nop
-30AC: 00          nop
-30AD: 00          nop
-30AE: 18 18       jr   $30C8
-30B0: 08          ex   af,af'
-30B1: 10 00       djnz $30B3
-30B3: 00          nop
-30B4: 00          nop
-30B5: 00          nop
-30B6: 00          nop
-30B7: 3E 00       ld   a,$00
-30B9: 00          nop
-30BA: 00          nop
-30BB: 00          nop
-30BC: 00          nop
-30BD: 00          nop
-30BE: 00          nop
-30BF: 00          nop
-30C0: 00          nop
-30C1: 00          nop
-30C2: 00          nop
-30C3: 18 18       jr   $30DD
-30C5: 00          nop
-30C6: 00          nop
-30C7: 01 02 04    ld   bc,$0402
-30CA: 08          ex   af,af'
-30CB: 10 20       djnz $30ED
-30CD: 40          ld   b,b
+
 
 
 ;
@@ -8128,7 +7735,7 @@ INCREMENT_BY_1:
 ; 
 ; See also: START macro contained within NMI.ASM in Frenzy's source code.
 
-SFIRE:
+sfire_33bd:
 33BD: 21 89 08    ld   hl,$0889              ; load HL with address of PC1
 33C0: F5          push af
 33C1: 3E 00       ld   a,$00                 ; priority of bolt sound
@@ -8301,7 +7908,7 @@ sfry_3439:
 ; See also: START macro contained within NMI.ASM in Frenzy's source code.
 ;
 
-SBLAM:
+sblam_348a:
 348A: 21 89 08    ld   hl,$0889
 348D: F5          push af
 348E: 3E 01       ld   a,$01
@@ -8380,7 +7987,7 @@ SBLAM:
 ; See also: SRFIRE# in NMI.ASM within Frenzy's source code.
 ;
 
-SRFIRE:
+srfire_34e7:
 34E7: 21 89 08    ld   hl,$0889
 34EA: F5          push af
 34EB: 3E 01       ld   a,$01
@@ -8542,63 +8149,63 @@ SRFIRE:
 ;
 ;
 
-SET_COLOUR_ATTRS_35AF:
+set_35af:
 35AF: AF          xor  a
 35B0: 32 79 43    ld   ($4379),a             ; set FLIP to upright cabinet mode
 35B3: 3E 1E       ld   a,$1E
 35B5: 00          nop
 35B6: 00          nop
 
-35B7: CD 57 36    call $3657                 ; call COLOUR_FILL
+35B7: CD 57 36    call colour_fill_3657
 35BA: 
     00
     00
     05
     20 
     AA
-35BF: CD 57 36    call $3657                 ; call COLOUR_FILL
+35BF: CD 57 36    call colour_fill_3657
 35C2: 
     A0
     00
     29
     20 
     11
-35C7: CD 57 36    call $3657                 ; call COLOUR_FILL
+35C7: CD 57 36    call colour_fill_3657
 35CA: 
     A0
     00
     29
     09
     99
-35CF: CD 57 36    call $3657                 ; call COLOUR_FILL
+35CF: CD 57 36    call colour_fill_3657
 35D2: 
     A9
     00
     29
     08
     BB
-35D7: CD 57 36    call $3657                 ; call COLOUR_FILL
+35D7: CD 57 36    call colour_fill_3657
 35DA: 
     B0       
     00       
     29       
     10 
     55       
-35DF: CD 57 36    call $3657                 ; call COLOUR_FILL
+35DF: CD 57 36    call colour_fill_3657
 35E2: 
     C0
     05
     0A
     20 
     77
-35E7: CD 57 36    call $3657                 ; call COLOUR_FILL
+35E7: CD 57 36    call colour_fill_3657
 35EA: 
     80
     06 
     04
     0A
     AA
-35EF: CD 57 36    call $3657                 ; call COLOUR_FILL
+35EF: CD 57 36    call colour_fill_3657
 35F2: 
     96
     06 
@@ -8608,8 +8215,8 @@ SET_COLOUR_ATTRS_35AF:
 35F7: C9          ret
 
 
-COLOUR_FILL_WHITE:
-35F8: CD 57 36    call $3657                 ; call COLOUR_FILL
+colour_fill_white_35f8:
+35F8: CD 57 36    call colour_fill_3657
 35FB: 
     00          
     00          
@@ -8618,7 +8225,7 @@ COLOUR_FILL_WHITE:
     FF          
 3600: C9          ret
 
-3601: CD 57 36    call $3657                 ; call COLOUR_FILL
+3601: CD 57 36    call colour_fill_3657
 3604: 
     E0          
     05          
@@ -8627,7 +8234,7 @@ COLOUR_FILL_WHITE:
     33       
 3609: C9          ret
 
-360A: CD 57 36    call $3657                 ; call COLOUR_FILL
+360A: CD 57 36    call colour_fill_3657
 360D: 
     E0          
     05          
@@ -8636,7 +8243,7 @@ COLOUR_FILL_WHITE:
     99       
 3612: C9          ret
 
-3613: CD 57 36    call $3657                 ; call COLOUR_FILL
+3613: CD 57 36    call colour_fill_3657
 3616: 
     E0          
     05          
@@ -8645,28 +8252,28 @@ COLOUR_FILL_WHITE:
     66       
 361B: C9          ret
 
-361C: CD 57 36    call $3657                 ; call COLOUR_FILL
+361C: CD 57 36    call colour_fill_3657
 361F: 
     00          
     00          
     08          
     20 
     BB       
-3624: CD 57 36    call $3657                 ; call COLOUR_FILL
+3624: CD 57 36    call colour_fill_3657
 3627: 
     00    
     01 
     10 
     20    
     66
-362C: CD 57 36    call $3657                 ; call COLOUR_FILL
+362C: CD 57 36    call colour_fill_3657
 362F:
     00
     03
     04
     20 
     FF
-3634: CD 57 36    call $3657                 ; call COLOUR_FILL
+3634: CD 57 36    call colour_fill_3657
 3637:
     80
     03
@@ -8675,15 +8282,15 @@ COLOUR_FILL_WHITE:
     AA
 363C: C9          ret
 
-SET_COLOR_ATTRIBUTES:
-363D: CD 57 36    call $3657                 ; call COLOUR_FILL
+set_color_attributes_363d:
+363D: CD 57 36    call colour_fill_3657
 3640:
     00
     00
     2F
     20 
     CC
-3645: CD 57 36    call $3657                 ; call COLOUR_FILL
+3645: CD 57 36    call colour_fill_3657
 3648: 
     E0
     05
@@ -8692,7 +8299,7 @@ SET_COLOR_ATTRIBUTES:
     AA
 364D: C9          ret
 
-364E: CD 57 36    call $3657                 ; call COLOUR_FILL 
+364E: CD 57 36    call colour_fill_3657
 3651: 
     00
     00
@@ -8717,7 +8324,7 @@ SET_COLOR_ATTRIBUTES:
 ; Remarks:
 ; See also C.BOX in color.asm within Frenzy's source code.
 
-COLOUR_FILL:
+colour_fill_3657:
 3657: E1          pop  hl                    ; get parameter address
 3658: 5E          ld   e,(hl)                ; Read 1st parameter (offset LSB)
 3659: 23          inc  hl
@@ -8787,7 +8394,7 @@ COLOUR_FILL:
 369C: 20 F3       jr   nz,$3691
 369E: C9          ret
 
-369F: CD 57 36    call $3657                 ; call COLOUR_FILL
+369F: CD 57 36    call colour_fill_3657
 36A2: 
     80          
     06 
@@ -8796,7 +8403,7 @@ COLOUR_FILL:
     77
 
 36A7: CD E7 35    call $35E7
-36AA: CD 34 23    call $2334                 ; call GET_PLAYER_SCORE_PTR  
+36AA: CD 34 23    call get_player_score_ptr_2334
 36AD: EB          ex   de,hl
 36AE: 01 05 00    ld   bc,$0005
 36B1: 13          inc  de
@@ -8880,7 +8487,7 @@ COLOUR_FILL:
 ; Remarks: See UNCMAN within color.asm in Frenzy's source code.
 ;
 
-UNCOLOUR_MAN:
+uncolour_man_3719:
 3719: CB 5E       bit  3,(hl)               ; test BLANK bit
 371B: CA 3C 37    jp   z,$373C              ; if not set, jump to COLOUR_MAN            
 371E: CB 9E       res  3,(hl)
@@ -8914,7 +8521,7 @@ UNCOLOUR_MAN:
 ; See also: COLMAN in color.asm within Frenzy's source code.
 ;
 
-COLOUR_MAN:
+colour_man_373c:
 373C: CB 66       bit  4,(hl)                ; test STATUS_BIT_COLOR bit in VECTOR.Status
 373E: C8          ret  z                     ; if the flag isn't set to colour the player sprite, exit
 
