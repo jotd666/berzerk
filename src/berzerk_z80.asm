@@ -296,50 +296,50 @@
 ;- talk.asm within Frenzy's source code.
 ;*/
 
-KILL                        = $01
-ATTACK                      = $02
-CHARGE                      = $03
-GOT                         = $04
-SHOOT                       = $05
-GET                         = $06
-IS                          = $07
-ALERT                       = $08
-DETECTED                    = $09
-THE                         = $0A
-IN                          = $0B
-IT                          = $0C
-THERE                       = $0D
-WHERE                       = $0E
-HUMANOID                    = $0F
-COINS                       = $10
-POCKET                      = $11
-INTRUDER                    = $12 
-NO                          = $13
-ESCAPE                      = $14
-DESTROY                     = $15
-MUST                        = $16
-NOT                         = $17
-CHICKEN                     = $18 
-FIGHT                       = $19 
-LIKE                        = $1A
-A                           = $1B
-ROBOT                       = $1C
-???                         = $1D
+SFX_KILL                        = $01
+SFX_ATTACK                      = $02
+SFX_CHARGE                      = $03
+SFX_GOT                         = $04
+SFX_SHOOT                       = $05
+SFX_GET                         = $06
+SFX_IS                          = $07
+SFX_ALERT                       = $08
+SFX_DETECTED                    = $09
+SFX_THE                         = $0A
+SFX_IN                          = $0B
+SFX_IT                          = $0C
+SFX_THERE                       = $0D
+SFX_WHERE                       = $0E
+SFX_HUMANOID                    = $0F
+SFX_COINS                       = $10
+SFX_POCKET                      = $11
+SFX_INTRUDER                    = $12 
+SFX_NO                          = $13
+SFX_ESCAPE                      = $14
+SFX_DESTROY                     = $15
+SFX_MUST                        = $16
+SFX_NOT                         = $17
+SFX_CHICKEN                     = $18 
+SFX_FIGHT                       = $19 
+SFX_LIKE                        = $1A
+SFX_A                           = $1B
+SFX_ROBOT                       = $1C
+SFX_UNK                         = $1D
 
 
 ;Memory addresses
 
 ;Audio ports
-CR1_PORT                    = $40
-CR2_PORT                    = $41
-VOICE_PORT                  = $44                 ; Voice port number
+cr1_port_0040                    = $40
+cr2_port_0041                    = $41
+voice_port_0044                  = $44                 ; Voice port number
 
 
-UNKNOWN_0800                = $0800
-NMI_STACK_PTR               = $085E               ; used by NMI handler to store SP register while it does its thing 
+unknown_0800                = $0800
+nmi_stack_ptr_085e               = $085E               ; used by NMI handler to store SP register while it does its thing 
 
           
-V.PTR                       = $0870               ; pointer to next VECTOR struct
+V_PTR_0870                       = $0870               ; pointer to next VECTOR struct
 
 ;struct LINKED_LIST_ITEM
 ;{
@@ -349,43 +349,43 @@ V.PTR                       = $0870               ; pointer to next VECTOR struc
 ;    BYTE NextItemHi
 ;}
 
-LINKED_LIST_PTR             = $0872               ; pointer to head of job linked list
-STACK_PTR                   = $0874               ; used to preserve value of SP register in interrupt handler. See $26AC.
-MAN_PTR                     = $0876               ; pointer to current player's VECTOR structure
+linked_list_ptr_0872             = $0872               ; pointer to head of job linked list
+stack_ptr_0874                   = $0874               ; used to preserve value of SP register in interrupt handler. See $26AC.
+man_ptr_0876                     = $0876               ; pointer to current player's VECTOR structure
 
 ; Sound chip phantom registers (see also: EQUS.ASM within Frenzy's source code)
-TCR1                        = $0878
-TCR2	                    = $0879
-TCR3	                    = $087A
-TMR1	                    = $087B
-TMR2	                    = $087D
-TMR3	                    = $087F
-NOISE	                    = $0881
-VOL1	                    = $0882
-VOL2	                    = $0883
-VOL3	                    = $0884
+tcr1_0878                        = $0878
+tcr2_0879	                    = $0879
+tcr3_087a	                    = $087A
+tmr1_087b	                    = $087B
+tmr2_087d	                    = $087D
+tmr3_087f	                    = $087F
+noise_0881	                    = $0881
+vol1_0882	                    = $0882
+vol2_0883	                    = $0883
+vol3_0884	                    = $0884
 
-PC0                         = $0885
-PC1                         = $0889                       
+pc0_0885                         = $0885
+pc1_0889                         = $0889                       
 
 
-IS_CHICKEN                  = $089A               ; A flag that determines if the robots call you a chicken or not. 0 = Player not a chicken. $FF = Player is a chicken. See $2BC6 and $2C18.
-TALK_TIMER                  = $089B               ; Countdown before a robot speaks. When this hits 0, a robot will say something. See $2B9D.  
-SPEECH_BUFFER               = $0918               ; holds dynamically generated sequence of bytes to output to voice. See $2b6B. 
-PLAYER_COLOUR_ADDR          = $0940               ; pointer to attribute RAM where player's man is. Maps to CAddr within equs.asm in Frenzy's source code.
-PLAYER_COLOUR_SAVE          = $0942               ; buffer 10 bytes in size, used to hold attributes to be restored.
+is_chicken_089a                  = $089A               ; A flag that determines if the robots call you a chicken or not. 0 = Player not a chicken. $FF = Player is a chicken. See $2BC6 and $2C18.
+talk_timer_089b                  = $089B               ; Countdown before a robot speaks. When this hits 0, a robot will say something. See $2B9D.  
+speech_buffer_0918               = $0918               ; holds dynamically generated sequence of bytes to output to voice. See $2b6B. 
+player_colour_addr_0940          = $0940               ; pointer to attribute RAM where player's man is. Maps to CAddr within equs.asm in Frenzy's source code.
+player_colour_save_0942          = $0942               ; buffer 10 bytes in size, used to hold attributes to be restored.
 
 
 ; Bookkeeping totals held in CMOS
 ; Upper nibble (bits 4-7) hold 1 digit of value
-CMOS_CREDITS                = $08A4  
-CMOS_CHUTE1                 = $08A6
-CMOS_CHUTE2                 = $08AE
-CMOS_CHUTE3                 = $08B6
-CMOS_NUM_PLAYS              = $08BE               
-CMOS_TOTAL_SCORE            = $08C4
-CMOS_TOTAL_SECS_OF_PLAY     = $08D0
-CMOS_HIGH_SCORES            = $08DC
+cmos_credits_08a4                = $08A4  
+cmos_chute1_08a6                 = $08A6
+cmos_chute2_08ae                 = $08AE
+cmos_chute3_08b6                 = $08B6
+cmos_num_plays_08be              = $08BE               
+cmos_total_score_08c4            = $08C4
+cmos_total_secs_of_play_08d0     = $08D0
+cmos_high_scores_08dc            = $08DC
 
 
 ;Scratch pad RAM EQUs
@@ -446,53 +446,53 @@ STATUS_BIT_HIT      = 7
 ; First 3 bytes: score as BCD. e.g. a score of 123,456 would be stored like so: 12 34 56
 ; Last 3 bytes: name entered as (mostly) ASCII. 
 
-HI_SCORES                   = $4302               ; Start of high score table
-HI_SCORE_1                  = $4302               ; Top score
-HI_SCORE_2                  = $4308
-HI_SCORE_3                  = $430E
-HI_SCORE_4                  = $4314
-HI_SCORE_5                  = $431A
-HI_SCORE_6                  = $4320
-HI_SCORE_7                  = $4326
-HI_SCORE_8                  = $432C
-HI_SCORE_9                  = $4332
-HI_SCORE_10                 = $4338               ; lowest Hi Score
+hi_scores_4302                   = $4302               ; Start of high score table
+hi_score_1_4302                  = $4302               ; Top score
+hi_score_2_4308                  = $4308
+hi_score_3_430e                  = $430E
+hi_score_4_4314                  = $4314
+hi_score_5_431a                  = $431A
+hi_score_6_4320                  = $4320
+hi_score_7_4326                  = $4326
+hi_score_8_432c                  = $432C
+hi_score_9_4332                  = $4332
+hi_score_10_4338                 = $4338               ; lowest Hi Score
 
 
-P1_SCORE                    = $433E               ; Player 1's score. Stored as BCD.  
+p1_score_433e                    = $433E               ; Player 1's score. Stored as BCD.  
                                                     ; $433E = First two digits of score (hundred thousands & ten thousands) 
                                                     ; $433F = Third and fourth digits of score (thousands & hundreds)
                                                     ; $4340 = Last two digits of score (tens)   
                                                     ; e.g. a score of 101120 would be stored as 10 11 20
-P2_SCORE                    = $4341               ; Player 2's score. Stored in same format as player 1's.
+p2_score_4341                    = $4341               ; Player 2's score. Stored in same format as player 1's.
 
 ; Player state.
 ;
 ; Remarks: 
 ; The corresponding fields for Frenzy are stored in EQUS.ASM if you want to take a look.
 ;
-CURRENT_PLAYER              = $4344               ; 1 = player 1 playing , 2 = player 2 playing. 
-ROOM_X                      = $4345               ; X coordinate of room within *maze* - decrements when player exits room left, increments when player exits right 
-ROOM_Y                      = $4346               ; Y coordinate of room within *maze* - decrements when player exits room top, increments when player exits bottom 
-MAN_X                       = $4347               ; Player's X coordinate on screen. 
-MAN_Y                       = $4348               ; Player's Y coordinate on screen
-DEATHS                      = $4349               ; Lives left. 
-                            = $434A
-RBOLTS                      = $434B               ; Maximum number of Robot laser bolts allowed on screen at once. 0 = Robots never shoot. See $288E.
-ROBOT_SPEED                 = $434C               ; Value from 1..255. 1= Fastest, 255 = Slowest
-RWAIT                       = $434D               ; Initial robot firing holdoff timer. 
-OTTO_TIME                   = $434E               ; Countdown timer before Evil Otto appears. 
-XTRAMEN                     = $434F               ; Flag. Set to 1 when a bonus life has been awarded to player. Prevents more bonus lives.   
+current_player_4344              = $4344               ; 1 = player 1 playing , 2 = player 2 playing. 
+room_x_4345                      = $4345               ; X coordinate of room within *maze* - decrements when player exits room left, increments when player exits right 
+room_y_4346                      = $4346               ; Y coordinate of room within *maze* - decrements when player exits room top, increments when player exits bottom 
+man_x_4347                       = $4347               ; Player's X coordinate on screen. 
+man_y_4348                       = $4348               ; Player's Y coordinate on screen
+deaths_4349                      = $4349               ; Lives left. 
 
-RNG_SEED                    = $435C               ; Seed for the random number generator @ $2678
-UPDATE                      = $436D               ; Flag. Set to $FF when score needs to be updated on screen. See $218D
-IS_DEMO_MODE                = $436E               ; Flag. When set to a nonzero value, the game is showing "demo mode".   
-DEMO_PTR                    = $436F
-RCOUNT                      = $4371               ; Number of robots still alive in room, not counting Evil Otto. Is decremented when a robot is killed.
-RSAVED                      = $4372               ; Number of robots in room *when room starts*. Used to calculate bonus for clearing room. See $2491.
-NUMBER_OF_PLAYERS           = $4376               ; 1 = One player game, 2 = 2 player game
-PLAYER_COLOUR               = $4378               ; Colour of player. Used to set screen attributes.
-FLIP                        = $4379               ; 0 = Playing upright, 8 = playing on cocktail cabinet. 
+rbolts_434B                      = $434B               ; Maximum number of Robot laser bolts allowed on screen at once. 0 = Robots never shoot. See $288E.
+robot_speed_434C                 = $434C               ; Value from 1..255. 1= Fastest, 255 = Slowest
+rwait_434D                       = $434D               ; Initial robot firing holdoff timer. 
+otto_time_434E                   = $434E               ; Countdown timer before Evil Otto appears. 
+xtramen_434F                     = $434F               ; Flag. Set to 1 when a bonus life has been awarded to player. Prevents more bonus lives.   
+
+rng_seed_435C                    = $435C               ; Seed for the random number generator @ $2678
+update_436D                      = $436D               ; Flag. Set to $FF when score needs to be updated on screen. See $218D
+is_demo_mode_436E                = $436E               ; Flag. When set to a nonzero value, the game is showing "demo mode".   
+demo_ptr_436F                    = $436F
+rcount_4371                      = $4371               ; Number of robots still alive in room, not counting Evil Otto. Is decremented when a robot is killed.
+rsaved_4372                      = $4372               ; Number of robots in room *when room starts*. Used to calculate bonus for clearing room. See $2491.
+number_of_players_4376           = $4376               ; 1 = One player game, 2 = 2 player game
+player_colour_4378               = $4378               ; Colour of player. Used to set screen attributes.
+flip_4379                        = $4379               ; 0 = Playing upright, 8 = playing on cocktail cabinet. 
 
 
 ;
@@ -516,16 +516,16 @@ FLIP                        = $4379               ; 0 = Playing upright, 8 = pla
 ;7   BYTE LastY              ; Y coordinate of the tail of the bolt  
 ;} sizeof(BOLT) is 8 bytes
 
-PLAYER_BOLTS                = $437B
-    PLAYER_BOLT_1           = $437B        
-    PLAYER_BOLT_2           = $4383               
+player_bolts_437b                = $437B
+player_bolt_1_437b           = $437B        
+player_bolt_2_4383           = $4383               
 
-ROBOT_BOLTS                 = $438F
-
-
+robot_bolts_438f                 = $438F
 
 
 
+
+boot_0000:
 0000: 00          nop
 0001: F3          di
 0002: AF          xor  a
@@ -533,15 +533,15 @@ ROBOT_BOLTS                 = $438F
 0005: ED 47       ld   i,a
 0007: DB 61       in   a,($61)               ; read from F2
 0009: CB 47       bit  0,a                   ; check if "Colour Test Mode" bit is set
-000B: C2 00 02    jp   nz,$0200              ; if bit is set, goto COLOUR_TEST_MODE
+000B: C2 00 02    jp   nz,colour_test_mode_0200              ; if bit is set, goto colour_test_mode_0200
 000E: DB 60       in   a,($60)               ; read F3
 0010: CB 47       bit  0,a                   ; check if "Input Test Mode" bit is set
-0012: C2 31 05    jp   nz,$0531              ; if bit is set, goto INPUT_TEST_MODE
+0012: C2 31 05    jp   nz,input_test_mode_0531              ; if bit is set, goto input_test_mode_0531
 0015: DD 21 41 01 ld   ix,$0141
 0019: 18 68       jr   $0083
 
 
-001B: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+001B: CD 7B 29    call $297B                 ; call PRINT_STRING
 001E: 
     90
     20 08         ; X/Y coordinates
@@ -550,7 +550,7 @@ ROBOT_BOLTS                 = $438F
 0031:  50 6C 61 79 65 72 20 00                          Player . 
 0039: C9          ret
 
-003A: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+003A: CD 7B 29    call $297B                 ; call PRINT_STRING
 003D: 
     90          
     10 08         ; X/Y coordinates  
@@ -568,7 +568,7 @@ ROBOT_BOLTS                 = $438F
 006C: B7          or   a
 006D: C2 1D 05    jp   nz,$051D
 0070: F1          pop  af
-0071: C3 21 17    jp   $1721                 ; jump to main NMI handler code
+0071: C3 21 17    jp   nmi_handler_1721                 ; jump to main NMI handler code
 
 0074: 05          dec  b
 
@@ -764,7 +764,7 @@ ROBOT_BOLTS                 = $438F
 ; Called from $000B
 ;
 
-COLOUR_TEST_MODE:
+colour_test_mode_0200:
 0200: 01 48 10    ld   bc,$1048
 0203: ED 78       in   a,(c)
 0205: 0C          inc  c
@@ -1233,7 +1233,7 @@ COLOUR_TEST_MODE:
 
 
 ; Called from $0012
-INPUT_TEST_MODE:
+input_test_mode_0531:
 0531: 31 00 44    ld   sp,$4400
 0534: CD 4E 1A    call $1A4E                 ; call CLEAR_SCREEN
 0537: CD F8 35    call $35F8                 ; call COLOUR_FILL_WHITE 
@@ -1281,9 +1281,9 @@ INPUT_TEST_MODE:
 ; TODO: Tentative function name
 ; D = Y coordinate
 ; E = X coordinate
-JP_PRINT_STRING_06B8:
+JP_PRINT_STRING:
 0591: 06 00       ld   b,$00                 ; Magic RAM control bits 
-0593: C3 B8 06    jp   $06B8                 ; jump to PRINT_STRING_06B8
+0593: C3 B8 06    jp   $06B8                 ; jump to PRINT_STRING
 
 
 
@@ -1316,7 +1316,7 @@ PRINT_SET_BITS:
 05A2: F5          push af
 05A3: D5          push de
 05A4: C5          push bc
-05A5: CD 91 05    call $0591                 ; call JP_PRINT_STRING_06B8
+05A5: CD 91 05    call $0591                 ; call JP_PRINT_STRING
 05A8: C1          pop  bc
 05A9: D1          pop  de
 05AA: F1          pop  af
@@ -1354,7 +1354,7 @@ PRINT_SET_BITS:
 ;
 ;
 
-BOOKKEEPING:
+bookkeeping_0605:
 0605: AF          xor  a
 0606: D3 4F       out  ($4F),a               ; disable interrupts
 0608: DB 4E       in   a,($4E)               ; clear pending frame interrupts
@@ -1676,8 +1676,8 @@ CROSSHAIR_PATTERN_TEST_MODE:
 0783: C3 3A 07    jp   $073A                 ; go and draw the crosshair again
 
 
-WAIT_FOR_1P_FIRE_BUTTON:
 ; wait for fire button to be pressed
+WAIT_FOR_1P_FIRE_BUTTON:
 0786: DB 48       in   a,($48)               ; read P1 controls               
 0788: CB 67       bit  4,a                   ; test if FIRE pressed
 078A: 20 FA       jr   nz,$0786              ; jump if FIRE not pressed (remember, button is ACTIVE_LOW so is deemed pressed when bit NOT set)
@@ -1688,7 +1688,7 @@ WAIT_FOR_1P_FIRE_BUTTON:
 0790: 28 FA       jr   z,$078C               l jump if FIRE pressed to $078C
 0792: C9          ret
 
-0793: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+0793: CD 7B 29    call $297B                 ; call PRINT_STRING
 0796: 
     90
     08 20         ; X/Y coordinates    
@@ -1696,14 +1696,14 @@ WAIT_FOR_1P_FIRE_BUTTON:
 0799:  59 6F 75 20 68 61 76 65 20 6A 6F 69 6E 65 64 20  You have joined 
 07A9:  74 68 65 20 69 6D 6D 6F 72 74 61 6C 73 00        the immortals..
 
-07B7: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+07B7: CD 7B 29    call $297B                 ; call PRINT_STRING
 07BA: 
     90          
     0C 30         ; X/Y coordinates  
 07BD:  69 6E 20 74 68 65 20 42 45 52 5A 45 52 4B 20 68  in the BERZERK h
 07CD:  61 6C 6C 20 6F 66 20 66 61 6D 65 00              all of fame.
 
-07D9: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+07D9: CD 7B 29    call $297B                 ; call PRINT_STRING
 07DC: 
     90          
     18 50         ; X/Y coordinates 
@@ -2316,7 +2316,7 @@ WAIT_FOR_1P_FIRE_BUTTON:
 13DC: 00          nop
 13DD: C9          ret
 
-13DE: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+13DE: CD 7B 29    call $297B                 ; call PRINT_STRING
 13E1: 
     90          
     20 BE         ; X/Y coordinates      
@@ -2324,21 +2324,21 @@ WAIT_FOR_1P_FIRE_BUTTON:
 13F4:  65 63 6B 65 6E 00                                ecken.
 13FA: C9          ret
 
-13FB: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+13FB: CD 7B 29    call $297B                 ; call PRINT_STRING
 13FE: 
     90          
     44 BE         ; X/Y coordinates  
 1401:  50 75 6C 73 61 72 20 53 74 61 72 74 00           Pulsar Start.
 140E: C9          ret
 
-140F: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+140F: CD 7B 29    call $297B                 ; call PRINT_STRING
 1412: 
     90          
     58 BE         ; X/Y coordinates    
 1415:  49 6E 73 65 72 74 20 43 6F 69 6E 00              Insert Coin.
 1421: C9          ret
 
-1422: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1422: CD 7B 29    call $297B                 ; call PRINT_STRING
 1425: 
     90          
     30 BE         ; X/Y coordinates  
@@ -2346,14 +2346,14 @@ WAIT_FOR_1P_FIRE_BUTTON:
 1438:  6E 6E 61 69 65 00                                nnaie.
 143E: C9          ret
 
-143F: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+143F: CD 7B 29    call $297B                 ; call PRINT_STRING
 1442: 
     90          
     48 BE         ; X/Y coordinates 
 1445:  4D 75 6E 7A 65 20 65 69 6E 77 65 72 66 65 6E 00  Munze einwerfen.
 1455: C9          ret
 
-1456: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1456: CD 7B 29    call $297B                 ; call PRINT_STRING
 1459: 
     90          
     48 BE         ; X/Y coordinates 
@@ -2614,8 +2614,8 @@ CHECK_IF_ZERO_OR_E:
 ; Expects:
 ; IY = pointer to BOLT structure 
 
-HANDLE_BOLT_COLLISION:
 ; Deactivate the bolt. It's hit something - maybe just a wall.
+HANDLE_BOLT_COLLISION:
 15A0: FD 36 00 00 ld   (iy+$00),$00          ; Set BOLT.Direction to 0, meaning "Inactive"
 
 ; check if the bolt has hit the player
@@ -2876,7 +2876,7 @@ COLLISION_DETECTION:
 ;
 ; See also: NMI.ASM in Frenzy's source code
 
-NMI_HANDLER:
+nmi_handler_1721:
 1721: ED 73 5E 08 ld   ($085E),sp            ; preserve stack pointer in NMI_STACK_PTR
 1725: 31 5E 08    ld   sp,$085E
 1728: F5          push af
@@ -2886,17 +2886,17 @@ NMI_HANDLER:
 172C: DD E5       push ix
 172E: DB 65       in   a,($65)               ; read SW2
 1730: CB 7F       bit  7,a                   ; test BOOKKEEPING button
-1732: C2 05 06    jp   nz,$0605              ; if bit is set, goto BOOKKEEPING
+1732: C2 05 06    jp   nz,bookkeeping_0605              ; if bit is set, goto BOOKKEEPING
 
 1735: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 1738: B7          or   a
 1739: CC 12 1D    call z,$1D12
-173C: CD 76 17    call $1776                 ; call C.LOAD
+173C: CD 76 17    call $1776                 ; call CLOAD
 
 ; Do voice if not demo - This section of code is replicated in Frenzy. 
 173F: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 1742: B7          or   a                     ; test flag
-1743: 20 1D       jr   nz,$1762              ; if flag is non zero then in demo mode, goto STOP_TALKING.
+1743: 20 1D       jr   nz,stop_talking_1762              ; if flag is non zero then in demo mode, goto STOP_TALKING.
 
 1745: 2A 98 08    ld   hl,($0898)            ; Get VOICE_PC      
 
@@ -2912,7 +2912,7 @@ NMI_HANDLER:
 ; speak
 1754: 7E          ld   a,(hl)                ; read byte to send to voice hardware
 1755: CB 7F       bit  7,a                   ; test if byte is a terminator byte 
-1757: 20 09       jr   nz,$1762              ; if bit 7 is set, it is a terminator byte, goto STOP_TALKINGto shut up!
+1757: 20 09       jr   nz,stop_talking_1762              ; if bit 7 is set, it is a terminator byte, goto STOP_TALKINGto shut up!
 1759: 23          inc  hl
 175A: D3 44       out  ($44),a               ; output to VOICE_PORT
 175C: CB 77       bit  6,a                   ; test if a word
@@ -2920,7 +2920,7 @@ NMI_HANDLER:
 1760: 18 E6       jr   $1748                 ; do another byte for speech
 
 ; stop talking 
-STOP_TALKING:
+stop_talking_1762:
 1762: 21 00 00    ld   hl,$0000              ; NULL pointer 
 
 1765: 22 98 08    ld   ($0898),hl            ; update VOICE_PC
@@ -2948,7 +2948,7 @@ STOP_TALKING:
 ; See also: 
 ; C.LOAD within NMI.ASM in Frenzy's source code.
 
-C.LOAD:
+CLOAD:
 1776: 21 78 08    ld   hl,$0878              ; load HL with address of TCR1
 1779: 46          ld   b,(hl)
 177A: 23          inc  hl                    ; bump HL to point to TCR2
@@ -3324,7 +3324,7 @@ DECREMENT_CREDITS:
 ; Definitely called
 19AC: CD 4E 1A    call $1A4E                 ; call CLEAR_SCREEN
 19AF: CD AF 35    call $35AF                 ; call SET_COLOUR_ATTRS_35AF
-19B2: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+19B2: CD 7B 29    call $297B                 ; call PRINT_STRING
 19B5: 
     90 
     0C BE         ; X/Y coordinates
@@ -3417,9 +3417,9 @@ WRITE_FF_64_TIMES_HL:
 ;
 ;
 
-CLEAR_SCREEN:
-
 ; fill colour RAM with 0
+
+CLEAR_SCREEN:
 1A4E: 21 00 81    ld   hl,$8100
 1A51: 01 00 07    ld   bc,$0700
 1A54: AF          xor  a
@@ -3428,11 +3428,11 @@ CLEAR_SCREEN:
 1A57: 0D          dec  c
 1A58: 20 FB       jr   nz,$1A55
 1A5A: 10 F9       djnz $1A55
-1A5C: F3          di
-1A5D: ED 73 00 43 ld   ($4300),sp
+1A5C: F3          di				; block interrupts
+1A5D: ED 73 00 43 ld   ($4300),sp		; save stack
 
 ; clear screen image RAM by using stack commands
-; Set stack pointer to top of screen image RAM  
+; Set stack pointer to top of screen image RAM  (time critical)
 1A61: 31 00 60    ld   sp,$6000
 1A64: 06 E0       ld   b,$E0
 1A66: 11 00 00    ld   de,$0000
@@ -3454,7 +3454,7 @@ CLEAR_SCREEN:
 1A78: D5          push de                    ; .. to screen image RAM
 1A79: 10 EE       djnz $1A69
 
-1A7B: ED 7B 00 43 ld   sp,($4300)
+1A7B: ED 7B 00 43 ld   sp,($4300)		; restore stack
 1A7F: FB          ei
 1A80: DB 4A       in   a,($4A)               ; read player 2 controls
 1A82: CB 7F       bit  7,a                   ; test DIP switch to check if upright                      
@@ -3571,7 +3571,7 @@ LTABLE:
 1B02: 6F          ld   l,a
 1B03: E9          jp   (hl)
 
-1B04: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1B04: CD 7B 29    call $297B                 ; call PRINT_STRING
 1B07: 
     90          
     58 00         ; X/Y coordinates          
@@ -3579,7 +3579,7 @@ LTABLE:
 
 1B16: C9          ret
 
-1B17: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1B17: CD 7B 29    call $297B                 ; call PRINT_STRING
 1B1A: 
     90          
     48 00         ; X/Y coordinates             
@@ -3587,7 +3587,7 @@ LTABLE:
 
 1B2C: C9          ret
 
-1B2D: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1B2D: CD 7B 29    call $297B                 ; call PRINT_STRING
 1B30: 
     90          
     40 00         ; X/Y coordinates           
@@ -3596,7 +3596,7 @@ LTABLE:
 
 1B44: C9          ret
 
-1B45: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1B45: CD 7B 29    call $297B                 ; call PRINT_STRING
 1B48: 
     90          
     5C 00         ; X/Y coordinates  
@@ -3604,7 +3604,7 @@ LTABLE:
 
 1B53: C9          ret
 
-1B54: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1B54: CD 7B 29    call $297B                 ; call PRINT_STRING
 1B57: 
     90          
     14 BE         ; X/Y coordinates  
@@ -3612,7 +3612,7 @@ LTABLE:
 1B6A:  61 72 74 20 42 75 74 74 6F 6E 00                 art Button.
 1B75: C9          ret
 
-1B76: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1B76: CD 7B 29    call $297B                 ; call PRINT_STRING
 1B79: 
     90
     24 BE         ; X/Y coordinates 
@@ -3620,7 +3620,7 @@ LTABLE:
 1B8C:  74 61 72 74 20 31 00                             tart 1.
 1B93: C9          ret
 
-1B94: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1B94: CD 7B 29    call $297B                 ; call PRINT_STRING
 1B97: 
     90          
     04 BE         ; X/Y coordinates 
@@ -3628,7 +3628,7 @@ LTABLE:
 1BAA:  65 72 20 53 74 61 72 74 20 42 75 74 74 6F 6E 00  er Start Button.
 1BBA: C9          ret
 
-1BBB: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1BBB: CD 7B 29    call $297B                 ; call PRINT_STRING
 1BBE: 
     90          
     10 BE         ; X/Y coordinates 
@@ -3636,7 +3636,7 @@ LTABLE:
 1BD1:  74 61 72 74 20 31 20 6F 75 20 32 00              tart 1 ou 2.
 1BDD: C9          ret
 
-1BDE: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1BDE: CD 7B 29    call $297B                 ; call PRINT_STRING
 1BE1: 
     90          
     20 BE         ; X/Y coordinates
@@ -3644,21 +3644,21 @@ LTABLE:
 1BF4:  65 63 6B 65 6E 00 C9 CD 7B 29 90 44 BE 50 75 6C  ecken.
 1BFA: C9          ret
 
-1BFB: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1BFB: CD 7B 29    call $297B                 ; call PRINT_STRING
 1BFE: 
     90          
     44 BE         ; X/Y coordinates 
 1C01:  50 75 6C 73 61 72 20 53 74 61 72 74 00           Pulsar Start.
 1C0E: C9          ret
 
-1C0F: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1C0F: CD 7B 29    call $297B                 ; call PRINT_STRING
 1C12: 
     90          
     58 BE         ; X/Y coordinates 
 1C15:  49 6E 73 65 72 74 20 43 6F 69 6E 00              Insert Coin.
 1C21: C9          ret
 
-1C22: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1C22: CD 7B 29    call $297B                 ; call PRINT_STRING
 1C25: 
     90          
     30 BE         ; X/Y coordinates 
@@ -3666,14 +3666,14 @@ LTABLE:
 1C38:  6E 6E 61 69 65 00                                nnaie.          
 1C3E: C9          ret
 
-1C3F: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1C3F: CD 7B 29    call $297B                 ; call PRINT_STRING
 1C42: 
     90
     48 BE         ; X/Y coordinates 
 1C45:  4D 75 6E 7A 65 20 65 69 6E 77 65 72 66 65 6E 00  Munze einwerfen.
 1C55: C9          ret
 
-1C56: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+1C56: CD 7B 29    call $297B                 ; call PRINT_STRING
 1C59: 
     90
     48 BE         ; X/Y coordinates 
@@ -4136,11 +4136,11 @@ MAN:
 1EBB: C1          pop  bc
 1EBC: DD 2A 76 08 ld   ix,($0876)            ; Now IX = MAN_PTR, a pointer to the player's VECTOR structure. 
 1EC0: DD CB 00 7E bit  7,(ix+$00)            ; test STATUS_BIT_HIT bit is set. If it is, player has been killed!
-1EC4: C2 A7 1F    jp   nz,$1FA7              ; player's dead, goto PLAYER_DEAD
+1EC4: C2 A7 1F    jp   nz,player_dead_1fa7              ; player's dead, goto PLAYER_DEAD
 
 1EC7: 3A 6E 43    ld   a,($436E)             ; read IS_DEMO_MODE
 1ECA: B7          or   a                     ; check if zero. if zero, its a real game
-1ECB: 28 14       jr   z,$1EE1               ; its a real game, goto MOVE_PLAYER
+1ECB: 28 14       jr   z,move_player_1ee1               ; its a real game, goto MOVE_PLAYER
 
 ; automatic demo mode
 ; The player's movements during the demo are encoded as an array of DURL Direction bits in ROM.
@@ -4163,7 +4163,7 @@ MAN:
 ; Remarks:
 ; See also S.STICK in control.asm within Frenzy's source code.
 
-MOVE_PLAYER:
+move_player_1ee1:
 1EE1: 3A 79 43    ld   a,($4379)             ; read FLIP
 1EE4: B7          or   a					 ; is upright cabinet?
 1EE5: 28 04       jr   z,$1EEB				 ; yes, goto $1EEB
@@ -4177,7 +4177,7 @@ MOVE_PLAYER:
 1EED: EE 1F       xor  $1F                   
 1EEF: CB 67       bit  4,a                   ; test fire button
 1EF1: 57          ld   d,a                   ; save direction bits in D
-1EF2: 20 0D       jr   nz,$1F01              ; fire button pressed, goto TRY_FIRE
+1EF2: 20 0D       jr   nz,try_fire_1f01              ; fire button pressed, goto try_fire_1f01
 1EF4: E6 0F       and  $0F                   ; mask in left,right,up,down bits and discard rest
 1EF6: B9          cp   c                     ; compare to last direction player moved.
 1EF7: C4 91 1F    call nz,$1F91              ; if the player has changed direction, call CHANGE_PLAYER_DIRECTION
@@ -4195,14 +4195,14 @@ MOVE_PLAYER:
 ; 
 ; See also: TRY.F in Frenzy's MAN.ASM source.
 
-TRY_FIRE:
+try_fire_1f01:
 1F01: FD CB 00 4E bit  1,(iy+$00)
 1F05: 20 F3       jr   nz,$1EFA
 1F07: AF          xor  a
 
 1F08: FD 21 7B 43 ld   iy,$437B              ; load IY with address of PLAYER_BOLT_1
 1F0C: FD B6 04    or   (iy+$04)              ; is this bolt in use?
-1F0F: 28 0A       jr   z,$1F1B               ; no, we can use it to shoot, goto FIRE
+1F0F: 28 0A       jr   z,fire_1f1b               ; no, we can use it to shoot, goto FIRE
 1F11: FD 21 83 43 ld   iy,$4383              ; load IY with address of PLAYER_BOLT_2
 1F15: AF          xor  a
 1F16: FD B6 04    or   (iy+$04)              ; is this bolt in use?
@@ -4218,7 +4218,7 @@ TRY_FIRE:
 ;
 ; See also: FIRE contained within MAN.ASM in Frenzy's source
 
-FIRE:
+fire_1f1b:
 1F1B: 7A          ld   a,d                   ; get joystick + fire button bits from D
 1F1C: E6 0F       and  $0F                   ; preserve DURL direction bits, discard everything else
 1F1E: CA FA 1E    jp   z,$1EFA               ; if joystick in "neutral" position, don't shoot
@@ -4323,8 +4323,8 @@ CDIR:
 ; Remarks:
 ; See also DEAD in man.asm within Frenzy's source code. 
 
-PLAYER_DEAD:
-1FA7: CD 39 34    call $3439                 ; play sound of player being electrocuted 
+player_dead_1fa7:
+1FA7: CD 39 34    call sfry_3439                 ; play sound of player being electrocuted 
 1FAA: 3E 10       ld   a,$10                 ; set direction bits 
 1FAC: CD 94 1F    call $1F94                 ; call CDIR 
 1FAF: DD CB 00 EE set  5,(ix+$00)
@@ -4390,7 +4390,7 @@ MAN_INIT:
 ;
 ; Allocate space on the stack for a robot's VECTOR 
 ;
-
+ALLOCATE_FOR_ROBOT_VECTOR:
 200E: E1          pop  hl                    ; pop return address off stack
 200F: D9          exx
 
@@ -4825,7 +4825,7 @@ S.D:
 2265: 34          inc  (hl)                 ; increment X coordinate within maze
 2266: CD EB 22    call $22EB
 ; zero flag set if upright cabinet
-2269: 28 09       jr   z,$2274              ; if upright cabinet goto SCROLL_LEFT
+2269: 28 09       jr   z,scroll_left_2274              ; if upright cabinet goto SCROLL_LEFT
 
 ; cocktail cabinet
 226B: 21 1F 4F    ld   hl,$4F1F
@@ -4840,7 +4840,7 @@ S.D:
 ; See also: S.L in PLAY.ASM within Frenzy's source code. 
 ;
 
-SCROLL_LEFT:
+scroll_left_2274:
 2274: 21 00 4D    ld   hl,$4D00
 2277: 11 00 44    ld   de,$4400              ; load DE with address of screen image RAM   
 
@@ -5200,7 +5200,7 @@ SEEK:
 242B: DD E1       pop  ix
 242D: DD CB 00 7E bit  7,(ix+$00)            ; test STATUS_BIT_HIT in VECTOR.Status field  
 2431: CA EF 23    jp   z,$23EF               ; if bits not set, robot is still functional, goto $23EF
-2434: 18 21       jr   $2457                 ; Robot's been hit! Goto BLAM!
+2434: 18 21       jr   blam_2457                 ; Robot's been hit! Goto BLAM!
 
 
 ; Set the sprite pattern table pointer for a robot's VECTOR.
@@ -5246,7 +5246,7 @@ SETPAT:
 ;
 ; See also: BLAM contained within robot.asm in Frenzy's source code.
 
-BLAM:
+blam_2457:
 2457: E5          push hl
 2458: DD E5       push ix
 245A: CD 8A 34    call $348A                 ; play sound of robot exploding
@@ -5296,7 +5296,7 @@ BLAM:
 249D: 20 F5       jr   nz,$2494              ; repeat until 10PTs awarded for each robot.
 
 ; And now display message on screen stating the bonus for clearing the room
-249F: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+249F: CD 7B 29    call $297B                 ; call PRINT_STRING
 24A2: 
     00
     60 D5          
@@ -5744,7 +5744,7 @@ ERASE_PATTERN:
 2730: E5          push hl
 2731: FD E1       pop  iy                    ; IY = HL
 2733: CB 46       bit  0,(hl)                ; test ERASE bit in VECTOR.Status
-2735: CA 4D 27    jp   z,$274D               ; if we're not erasing, we must be writing, goto WRITE_PATTERN
+2735: CA 4D 27    jp   z,write_pattern_274d               ; if we're not erasing, we must be writing, goto write_pattern_274d
 2738: CB 86       res  0,(hl)                ; clear ERASE bit so its not done twice
 273A: 23          inc  hl                    ; bump HL to point to VECTOR.Magic
 273B: 7E          ld   a,(hl)                ; read VECTOR.Magic 
@@ -5771,7 +5771,7 @@ ERASE_PATTERN:
 ; Remarks:
 ; See also: SECT2 in Frenzy's INIT.ASM source.
 
-WRITE_PATTERN:
+write_pattern_274d:
 274D: CB 4E       bit  1,(hl)                ; test WRITE bit in VECTOR.Status
 274F: C8          ret  z
 2750: CB 8E       res  1,(hl)                ; clear WRITE bit
@@ -5969,7 +5969,7 @@ DRAW_SPRITE:
 2819: 7E          ld   a,(hl)                ; read width of sprite
 281A: 23          inc  hl                    ; bump HL to point to height 
 281B: 3D          dec  a
-281C: CA 53 28    jp   z,$2853               ; if width == 1 byte, goto DRAW_SPRITE_1_BYTE_WIDE
+281C: CA 53 28    jp   z,draw_sprite_1_byte_wide_2853               ; if width == 1 byte, goto draw_sprite_1_byte_wide
 
 ; Sprite is now presumed to be 2 bytes wide
 281F: 3A 79 43    ld   a,($4379)             ; read FLIP
@@ -6187,7 +6187,7 @@ SHOOT:
 ; C = DURL bits for robot's bolt
 28DE: 06 00       ld   b,$00                 ; zero B so that BC = index into D.TAB table
 28E0: E5          push hl
-28E1: CD E7 34    call $34E7                 ; call SRFIRE# to make robot shoot noise
+28E1: CD E7 34    call $34E7                 ; call SRFIRE to make robot shoot noise
 28E4: 21 42 20    ld   hl,$2042              ; load HL with address of D.TAB table
 28E7: 09          add  hl,bc                 ; now HL = pointer to offset in D.TAB table
 28E8: 4E          ld   c,(hl)                ; now BC = offset read from D.TAB table                
@@ -6374,7 +6374,7 @@ S.TAB:
 ;
 ; When the print routine reads a zero byte, it will then jump to the instruction following the byte.
 
-PRINT_STRING_297B:
+PRINT_STRING:
 297B: E1          pop  hl                    ; get return address from stack into HL
 297C: 46          ld   b,(hl)                ; load B with magic RAM control bits
 297D: 23          inc  hl
@@ -6586,9 +6586,9 @@ PRINT_DIGITS:
 2A48: 08          ex   af,af'                ; Save magic register byte
 2A49: C1          pop  bc
 
-SHOWO:
 ; bit 0 of C determines if numbers will be padded out to B digits length with leading spaces if required.
 ; if bit 0 is set, then padding is disabled (see $2A65) 
+SHOWO:
 2A4A: CB 81       res  0,c                   ; clear bit 0 of c, number will be padded with leading spaces 
 
 2A4C: 78          ld   a,b                   ; load A with number of digits to print
@@ -6971,16 +6971,16 @@ SAY_INTRUDER_ALERT_INTRUDER_ALERT:
 ; Called when exiting a room after killing all robots (with exception of Otto, of course).
 ;
 ;
+; Has the player killed all of the robots?
 
 TRY_SPEAK_ON_PLAYER_LEAVING_ROOM:
-; Has the player killed all of the robots?
 2BE4: 3A 71 43    ld   a,($4371)             ; read RCOUNT
 2BE7: B7          or   a                     ; test if zero.
-2BE8: 20 29       jr   nz,$2C13              ; if there's still some robots left in the maze, player's a chicken. Goto SAY_CHICKEN_FIGHT_LIKE_A_ROBOT
-
+2BE8: 20 29       jr   nz,say_chicken_fight_like_a_robot_2C13              ; if there's still some robots left in the maze, player's a chicken. Goto SAY_CHICKEN_FIGHT_LIKE_A_ROBOT
 ; Player's not a chicken. 
 ; Say "THE HUMANOID MUST NOT ESCAPE" or "THE INTRUDER MUST NOT ESCAPE"
 ; First, select pitch of robot voice.
+say_chicken_fight_like_a_robot:
 2BEA: 21 18 09    ld   hl,$0918              ; load HL with address of SPEECH_BUFFER
 2BED: CD 78 26    call $2678                 ; call RANDOM
 2BF0: E6 07       and  $07                   ; clamp number to 0..7
@@ -7011,7 +7011,7 @@ TRY_SPEAK_ON_PLAYER_LEAVING_ROOM:
 ;  The player's exited the room. Taunt them with "Chicken, fight like a robot" (!)
 ;
 ;
-SAY_CHICKEN_FIGHT_LIKE_A_ROBOT:
+say_chicken_fight_like_a_robot_2C13:
 2C13: 21 35 2C    ld   hl,$2C35              ; load HL with address of CHICKEN_FIGHT_LIKE_A_ROBOT_SPEECH_BYTES speech data
 2C16: 3E FF       ld   a,$FF                 ; This will make the player a chicken in the robot's eyes!
 
@@ -7395,7 +7395,7 @@ INCREMENT_BY_1:
 2DD5: DB 4A       in   a,($4A)               ; read player 2 controls
 2DD7: C9          ret
 
-2DD8: CD 7B 29    call $297B                 ; call PRINT_STRING_297B
+2DD8: CD 7B 29    call $297B                 ; call PRINT_STRING
 2DDB: 
     90          
     20 08         ; X/Y coordinates
@@ -8231,7 +8231,7 @@ SFIRE:
 ;
 ; See also: START macro in NMI.ASM within Frenzy's source code. 
 
-SFRY:
+sfry_3439:
 3439: 21 89 08    ld   hl,$0889              ; load HL with address of PC1 
 343C: F5          push af
 343D: 3E 03       ld   a,$03                 
@@ -8380,7 +8380,7 @@ SBLAM:
 ; See also: SRFIRE# in NMI.ASM within Frenzy's source code.
 ;
 
-SRFIRE#:
+SRFIRE:
 34E7: 21 89 08    ld   hl,$0889
 34EA: F5          push af
 34EB: 3E 01       ld   a,$01
@@ -8675,6 +8675,7 @@ COLOUR_FILL_WHITE:
     AA
 363C: C9          ret
 
+SET_COLOR_ATTRIBUTES:
 363D: CD 57 36    call $3657                 ; call COLOUR_FILL
 3640:
     00
